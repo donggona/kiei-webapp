@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국산업교육연구소 안전교육센터</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gd:#1A5E29;--gm:#2A7D3B;--gi:#3A9B4E;--gl:#EAF5EC;--gp:#F4FAF5;
+  --w:#fff;--g1:#F9FAF9;--g2:#E8ECE8;--g4:#9AA89A;--g5:#6B7B6C;--g7:#374137;--g8:#1A231B;
+  --ac:#C8A84B;--ar:#D94F3D;
+  --sh:0 2px 8px rgba(0,0,0,0.08);--shm:0 6px 24px rgba(0,0,0,0.13);--shl:0 12px 40px rgba(0,0,0,0.18);
+  --r:10px;--rs:6px;--tr:all .22s ease;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;color:var(--g8);background:var(--w);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea,select{font-family:inherit}img{max-width:100%;display:block}ul{list-style:none}
+.page{display:none}.page.active{display:block}
+
+/* TOPBAR */
+.topbar{background:var(--gd);padding:6px 24px;display:flex;justify-content:flex-end;align-items:center;gap:20px}
+.topbar a{color:rgba(255,255,255,0.72);font-size:12px;cursor:pointer;transition:var(--tr)}
+.topbar a:hover{color:#fff}
+.td{color:rgba(255,255,255,0.3)}
+
+/* NAV */
+nav{background:var(--w);border-bottom:2px solid var(--gm);position:sticky;top:0;z-index:200;box-shadow:var(--sh)}
+.nav-inner{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:66px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.logo-img{width:54px;height:38px;object-fit:contain}
+.logo-text .main{font-size:13.5px;font-weight:800;color:var(--gd);line-height:1.3}
+.logo-text .sub{font-size:10px;color:var(--g5)}
+.nm{display:flex;align-items:center;gap:2px}
+.nm a{padding:8px 13px;font-size:13.5px;font-weight:500;color:var(--g7);border-radius:var(--rs);transition:var(--tr);white-space:nowrap;cursor:pointer}
+.nm a:hover,.nm a.active{background:var(--gl);color:var(--gd)}
+.ncta{background:var(--gm)!important;color:#fff!important;font-weight:700!important;padding:9px 20px!important;border-radius:20px!important}
+.ncta:hover{background:var(--gd)!important}
+.hbg{display:none;flex-direction:column;gap:5px;padding:8px;cursor:pointer}
+.hbg span{display:block;width:24px;height:2px;background:var(--g7);border-radius:2px}
+.mmenu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--w);z-index:300;padding:80px 24px 100px;flex-direction:column;gap:4px;overflow-y:auto}
+.mmenu.open{display:flex}
+.mmenu a{padding:14px 16px;font-size:16px;font-weight:500;color:var(--g8);border-radius:var(--r);border-bottom:1px solid var(--g2);cursor:pointer}
+.mc{position:absolute;top:20px;right:20px;font-size:26px;cursor:pointer;color:var(--g7)}
+
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--gd);color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:500;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;box-shadow:var(--shm)}
+.toast.show{opacity:1}
+
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:center;justify-content:center;padding:20px}
+.mo.open{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:var(--shl)}
+.mh{padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.mh h3{font-size:18px;font-weight:800;color:var(--gd)}
+.mc2{font-size:24px;color:var(--g4);cursor:pointer}
+.mb{padding:0 24px 24px}
+.mf{padding:16px 24px;border-top:1px solid var(--g2);display:flex;gap:10px;justify-content:flex-end}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;height:580px}
+.hi{width:100%;height:100%;object-fit:cover;display:block}
+.ho{position:absolute;inset:0;background:linear-gradient(90deg,rgba(26,94,41,0.92) 0%,rgba(26,94,41,0.80) 38%,rgba(26,94,41,0.38) 65%,rgba(0,0,0,0.04) 100%)}
+.hc{position:absolute;inset:0;display:flex;align-items:center}
+.hin{max-width:1140px;margin:0 auto;padding:0 24px;width:100%}
+.ht{max-width:610px;animation:fadeUp .8s ease both}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.18);color:#fff;font-size:11.5px;font-weight:600;padding:6px 16px;border-radius:20px;margin-bottom:20px;border:1px solid rgba(255,255,255,0.35);backdrop-filter:blur(6px);width:fit-content}
+.hbadge::before{content:'';width:6px;height:6px;background:#FFE066;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite}
+.hero h1{font-size:clamp(28px,4.5vw,50px);font-weight:900;color:#fff;line-height:1.18;margin-bottom:14px;text-shadow:0 2px 16px rgba(0,0,0,0.25);letter-spacing:-0.02em}
+.hero h1 strong{color:#FFE066}
+.hero .lead{font-size:16px;color:rgba(255,255,255,0.95);margin-bottom:8px;font-weight:600}
+.hero .sub{font-size:14px;color:rgba(255,255,255,0.82);margin-bottom:32px;line-height:1.75}
+.hbtns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px}
+.bw{background:#fff;color:var(--gd);font-weight:700;padding:14px 28px;border-radius:var(--rs);font-size:14px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 6px 20px rgba(0,0,0,0.18);transition:var(--tr)}
+.bw:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.26)}
+.bow{background:transparent;color:#fff;font-weight:600;padding:14px 28px;border-radius:var(--rs);font-size:14px;border:2px solid rgba(255,255,255,0.65);cursor:pointer;transition:var(--tr)}
+.bow:hover{background:rgba(255,255,255,0.15);border-color:#fff}
+.hstats{display:flex;background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.22);border-radius:12px;backdrop-filter:blur(8px);width:fit-content;overflow:hidden;flex-wrap:wrap}
+.hs{text-align:center;color:#fff;padding:14px 22px}
+.hs .n{font-size:24px;font-weight:900;line-height:1}
+.hs .n span{font-size:14px;font-weight:500}
+.hs .l{font-size:11px;color:rgba(255,255,255,0.72);margin-top:4px}
+.hsd{width:1px;background:rgba(255,255,255,0.22);margin:12px 0}
+.cfl{position:absolute;bottom:28px;right:28px;display:flex;flex-direction:column;gap:10px}
+.cc{background:rgba(255,255,255,0.95);border-radius:12px;padding:10px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,0.18);animation:float 4s ease-in-out infinite}
+.cc:nth-child(2){animation-delay:1.5s}
+.cc strong{display:block;font-size:12px;color:var(--gd);font-weight:800;line-height:1.3}
+.cc span{font-size:10.5px;color:var(--g5)}
+
+/* NOTICE */
+.nstrip{background:var(--gl);border-bottom:1px solid var(--g2);padding:10px 24px;display:flex;align-items:center;gap:12px}
+.nbadge{background:var(--gm);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+.nstrip p{font-size:13px;color:var(--g8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nstrip a{font-size:12px;color:var(--gm);font-weight:600;margin-left:auto;white-space:nowrap;flex-shrink:0;cursor:pointer}
+
+/* SECTION */
+.sec{padding:64px 24px}.sec-alt{background:var(--g1)}.sec-g{background:var(--gp)}
+.si{max-width:1140px;margin:0 auto}
+.sh{margin-bottom:36px}
+.st{font-size:22px;font-weight:800;color:var(--gd);margin-bottom:6px}
+.st em{color:var(--gi);font-style:normal}
+.ss{font-size:13px;color:var(--g5);line-height:1.6}
+
+/* BUTTONS */
+.bp{background:var(--gm);color:#fff;font-weight:700;padding:12px 24px;border-radius:var(--rs);font-size:14px;border:none;cursor:pointer;transition:var(--tr);display:inline-flex;align-items:center;gap:6px}
+.bp:hover{background:var(--gd);transform:translateY(-1px);box-shadow:var(--shm)}
+.bs{background:var(--w);color:var(--gm);font-weight:600;padding:11px 22px;border-radius:var(--rs);font-size:14px;border:1.5px solid var(--gm);cursor:pointer;transition:var(--tr)}
+.bs:hover{background:var(--gl)}
+.bd{background:var(--ar);color:#fff;font-weight:600;padding:9px 18px;border-radius:var(--rs);font-size:13px;border:none;cursor:pointer}
+.bsm{padding:7px 16px!important;font-size:12px!important}
+
+/* GRID / CARD */
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px}
+.card{background:var(--w);border-radius:var(--r);border:1.5px solid var(--g2);transition:var(--tr);overflow:hidden}
+.card:hover{border-color:var(--gm);box-shadow:var(--shm);transform:translateY(-3px)}
+.cb{padding:24px}
+.ci{width:48px;height:48px;background:var(--gl);border-radius:var(--r);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:22px}
+.card h3{font-size:15px;font-weight:700;color:var(--g8);margin-bottom:8px}
+.card p{font-size:13px;color:var(--g5);line-height:1.65;margin-bottom:16px}
+.cl{font-size:13px;font-weight:700;color:var(--gm);cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+
+/* BADGE */
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;margin-bottom:10px}
+.bl{background:#FEF3E2;color:#B45309}.bsp{background:#EDE9FE;color:#6D28D9}.bc{background:#DCFCE7;color:#166534}.bcat{background:var(--gl);color:var(--gd)}.bn{background:var(--gm);color:#fff}
+
+/* POST */
+.pcard{background:var(--w);border-radius:var(--r);border:1.5px solid var(--g2);overflow:hidden;transition:var(--tr);cursor:pointer}
+.pcard:hover{box-shadow:var(--shm);transform:translateY(-3px);border-color:var(--gm)}
+.pt{height:168px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;overflow:hidden}
+.ptcat{position:absolute;top:12px;left:12px;background:var(--gm);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px}
+.pc{padding:20px}
+.pd{font-size:11px;color:var(--g4);margin-bottom:6px}
+.ptitle{font-size:14px;font-weight:700;color:var(--g8);line-height:1.55;margin-bottom:8px}
+.pex{font-size:12.5px;color:var(--g5);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ptags{margin-top:12px;display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:10px;background:var(--gl);color:var(--gd);padding:3px 9px;border-radius:8px;font-weight:500}
+
+/* CTA BANNER */
+.ctab{background:linear-gradient(135deg,var(--gd) 0%,var(--gi) 100%);padding:56px 24px;text-align:center}
+.ctab h2{font-size:26px;font-weight:800;color:#fff;margin-bottom:10px}
+.ctab p{font-size:14px;color:rgba(255,255,255,0.85);margin-bottom:28px;line-height:1.7}
+.cr{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* FORM */
+.fg{margin-bottom:18px}
+.fl{display:block;font-size:13px;font-weight:600;color:var(--g7);margin-bottom:6px}
+.fl .req{color:var(--ar);margin-left:2px}
+.fi{width:100%;padding:11px 14px;border:1.5px solid var(--g2);border-radius:var(--rs);font-size:14px;font-family:inherit;color:var(--g8);transition:var(--tr);background:#fff}
+.fi:focus{outline:none;border-color:var(--gm);box-shadow:0 0 0 3px rgba(42,125,59,0.1)}
+.fi::placeholder{color:var(--g4)}
+textarea.fi{resize:vertical;min-height:120px}
+select.fi{appearance:none;cursor:pointer}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* TABLE */
+.tw{overflow-x:auto;border-radius:var(--r);border:1.5px solid var(--g2)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--gl)}
+thead th{padding:12px 16px;text-align:left;font-weight:700;color:var(--gd);font-size:12px;white-space:nowrap}
+tbody td{padding:12px 16px;border-top:1px solid var(--g1);vertical-align:middle}
+tbody tr:hover{background:var(--g1)}
+.tc{text-align:center}
+.sb{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px}
+.spa{background:#DCFCE7;color:#166534}.spp{background:#FEF3E2;color:#B45309}.spc{background:#EDE9FE;color:#6D28D9}.spr{background:#FEE2E2;color:#991B1B}
+
+/* ALERT */
+.alert{padding:14px 18px;border-radius:var(--rs);font-size:13px;margin-bottom:16px;border-left:4px solid}
+.aok{background:#F0FFF4;color:#166534;border-color:var(--gm)}.ainfo{background:var(--gl);color:var(--gd);border-color:var(--gi)}.aerr{background:#FFF0F0;color:#991B1B;border-color:var(--ar)}
+
+/* CONTACT */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.crow{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start}
+.cbox{width:40px;height:40px;background:var(--gl);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.crow strong{display:block;font-size:13px;font-weight:700;color:var(--g8);margin-bottom:3px}
+.crow p{font-size:13px;color:var(--g5);line-height:1.55}
+.mapbox{background:var(--gl);border-radius:var(--r);height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:2px dashed var(--gi);cursor:pointer;transition:var(--tr)}
+.mapbox:hover{background:var(--gp)}
+.mapbox p{font-size:14px;color:var(--gd);font-weight:600}
+.mapbox span{font-size:12px;color:var(--g5)}
+
+/* ADMIN */
+.alayout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 130px)}
+.aside{background:var(--gd);padding:24px 0}
+.aside h4{padding:0 20px 12px;font-size:11px;font-weight:700;color:rgba(255,255,255,0.45);letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:8px}
+.aside a{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:rgba(255,255,255,0.75);transition:var(--tr);cursor:pointer}
+.aside a:hover,.aside a.active{background:rgba(255,255,255,0.12);color:#fff}
+.aside a span{font-size:16px}
+.amain{padding:32px;background:var(--g1)}
+.ah{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.ah h2{font-size:20px;font-weight:800;color:var(--g8)}
+.scards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px}
+.scard{background:#fff;border-radius:var(--r);padding:20px;border:1.5px solid var(--g2)}
+.scard .sn{font-size:28px;font-weight:900;color:var(--gd);line-height:1}
+.scard .sl{font-size:12px;color:var(--g5);margin-top:4px}
+.scard .sc{font-size:11px;color:var(--gi);margin-top:8px;font-weight:600}
+.ac{background:#fff;border-radius:var(--r);border:1.5px solid var(--g2);padding:24px;margin-bottom:20px}
+.ac h3{font-size:15px;font-weight:700;color:var(--g8);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--g1)}
+.aibox{background:linear-gradient(135deg,var(--gl),var(--gp));border:1.5px solid var(--gi);border-radius:var(--r);padding:20px}
+.aibox h4{font-size:13px;font-weight:700;color:var(--gd);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.aii{font-size:13px;color:var(--g7);margin-bottom:10px;padding-left:16px;position:relative;line-height:1.65}
+.aii::before{content:'•';position:absolute;left:0;color:var(--gm);font-weight:700}
+.cbw{display:flex;flex-direction:column;gap:8px}
+.cbi{display:flex;align-items:center;gap:10px}
+.cbl{font-size:12px;color:var(--g5);width:100px;flex-shrink:0;text-align:right}
+.cbt{flex:1;background:var(--g2);border-radius:4px;height:20px;overflow:hidden}
+.cbf{height:100%;background:var(--gm);border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px}
+.cbf span{font-size:10px;color:#fff;font-weight:600}
+
+/* TABS */
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--g2);margin-bottom:28px;overflow-x:auto}
+.tb{padding:10px 18px;font-size:13.5px;font-weight:500;color:var(--g5);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:var(--tr);background:none;border-top:none;border-left:none;border-right:none}
+.tb.active{color:var(--gm);font-weight:700;border-bottom-color:var(--gm)}
+.tpanel{display:none}.tpanel.active{display:block}
+
+/* PAGE HERO */
+.ph{background:var(--gm);padding:40px 24px;color:#fff}
+.phi{max-width:1140px;margin:0 auto}
+.phi .bc{font-size:12px;color:rgba(255,255,255,0.65);margin-bottom:10px}
+.phi h1{font-size:26px;font-weight:800;margin-bottom:6px}
+.phi p{font-size:14px;color:rgba(255,255,255,0.85)}
+
+/* MYPAGE */
+.mlayout{display:grid;grid-template-columns:220px 1fr;gap:28px;max-width:1140px;margin:0 auto;padding:40px 24px}
+.msb{background:#fff;border-radius:var(--r);border:1.5px solid var(--g2);padding:24px;height:fit-content}
+.mav{width:64px;height:64px;background:var(--gl);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
+.mname{text-align:center;font-size:15px;font-weight:700;margin-bottom:4px}
+.mrole{text-align:center;font-size:11px;color:var(--g4);margin-bottom:20px}
+.mnav a{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--rs);font-size:13px;color:var(--g5);cursor:pointer;transition:var(--tr)}
+.mnav a:hover,.mnav a.active{background:var(--gl);color:var(--gd);font-weight:600}
+
+/* FAQ */
+.fqi{border:1.5px solid var(--g2);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.fqq{padding:16px 20px;font-size:14px;font-weight:600;color:var(--g8);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:var(--tr)}
+.fqq:hover,.fqq.open{background:var(--gl);color:var(--gd)}
+.fqa{display:none;padding:14px 20px;font-size:13.5px;color:var(--g5);line-height:1.7;border-top:1px solid var(--g2);background:var(--g1)}
+.fqa.open{display:block}
+.fqarr{font-size:18px;transition:transform .25s}
+.fqq.open .fqarr{transform:rotate(180deg)}
+
+/* CALENDAR */
+.calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.calh h3{font-size:17px;font-weight:700}
+.calnb{background:var(--gl);border:none;border-radius:var(--rs);padding:6px 12px;font-size:18px;cursor:pointer;color:var(--gd)}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.calday-name{text-align:center;font-size:11px;font-weight:700;color:var(--g4);padding:8px 0}
+.calday{min-height:80px;background:#fff;border:1px solid var(--g1);border-radius:var(--rs);padding:6px;font-size:12px}
+.calday.other{background:var(--g1);color:var(--g2)}.calday.today{border-color:var(--gm);background:var(--gl)}
+.calday .dn{font-weight:600;color:var(--g7);margin-bottom:4px}
+.calev{font-size:10px;background:var(--gm);color:#fff;padding:2px 5px;border-radius:3px;margin-bottom:2px;cursor:pointer;line-height:1.3}
+.calev.full{background:var(--g4)}.calev.soon{background:var(--ac)}
+
+/* CERT */
+.cprev{border:2px solid var(--gm);border-radius:var(--r);padding:32px;text-align:center;background:linear-gradient(135deg,#fff,var(--gp))}
+.crow2{display:flex;padding:6px 0;border-bottom:1px solid var(--g1)}
+.crow2:last-child{border-bottom:none}
+.crow2 .lbl{width:80px;color:var(--g4);font-size:13px;flex-shrink:0;text-align:left}
+.crow2 .val{font-size:13px;font-weight:600;text-align:left}
+
+/* FOOTER */
+footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
+.finner{max-width:1140px;margin:0 auto}
+.ftop{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:40px;margin-bottom:32px}
+.fbrand .fn{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px}
+.fbrand .fs{font-size:12px;color:rgba(255,255,255,0.55)}
+.fbrand .fc2{margin-top:14px}
+.fbrand .fc2 p{font-size:11px;color:rgba(255,255,255,0.5);line-height:2}
+.fcol h5{font-size:11px;font-weight:700;color:#fff;margin-bottom:12px;letter-spacing:.5px;text-transform:uppercase}
+.fcol a{display:block;font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:7px;transition:var(--tr);cursor:pointer}
+.fcol a:hover{color:#fff}
+.fcon .tel{font-size:22px;font-weight:900;color:#fff;margin:6px 0}
+.fcon p{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:4px;line-height:1.8}
+.fbot{border-top:1px solid rgba(255,255,255,0.12);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.fbot p{font-size:11px;color:rgba(255,255,255,0.38)}
+.fbl{display:flex;gap:16px}
+.fbl a{font-size:11px;color:rgba(255,255,255,0.45);cursor:pointer}
+.fbl a:hover{color:#fff}
+
+/* MOBILE CTA */
+.mcta{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--gm);padding:10px 16px;z-index:250;box-shadow:0 -2px 12px rgba(0,0,0,0.15)}
+.mcta a{display:block;background:#fff;color:var(--gd);text-align:center;font-weight:800;font-size:15px;padding:14px;border-radius:var(--r)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.ftop{grid-template-columns:1fr 1fr}.alayout{grid-template-columns:180px 1fr}}
+@media(max-width:768px){
+  .nm{display:none}.hbg{display:flex}
+  .hero{height:auto;min-height:520px}.hc{padding:40px 20px}.hin{padding:0}
+  .cg{grid-template-columns:1fr}.mlayout{grid-template-columns:1fr}.msb{display:none}
+  .alayout{grid-template-columns:1fr}.aside{display:none}
+  .ftop{grid-template-columns:1fr}.fcol:not(.fbrand){display:none}
+  .fr2{grid-template-columns:1fr}.cfl{display:none}
+  .mcta{display:block}body{padding-bottom:72px}
+  .hstats{flex-wrap:wrap}
+}
+@media(max-width:480px){.hero h1{font-size:24px}.cr{flex-direction:column;align-items:center}.hbtns{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a onclick="showPage('notice')">공지사항</a>
+  <span class="td">|</span>
+  <a href="https://blog.naver.com/1990kiei" target="_blank">네이버 블로그</a>
+  <span class="td">|</span>
+  <a onclick="showPage('login')" id="tauth">로그인</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="showPage('home')">
+      <img class="logo-img" id="logo-img" src="data:image/png;base64,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" alt="KIEI 로고">
+      <div class="logo-text">
+        <div class="main">한국산업교육연구소</div>
+        <div class="sub">안전교육센터</div>
+      </div>
+    </div>
+    <div class="nm">
+      <a onclick="showPage('about')">연구소 소개</a>
+      <a onclick="showPage('courses')">교육과정</a>
+      <a onclick="showPage('blog')">안전정보</a>
+      <a onclick="showPage('resources')">자료실</a>
+      <a onclick="showPage('notice')">공지사항</a>
+      <a onclick="showPage('contact')">문의/찾아오기</a>
+      <a onclick="showPage('apply')" class="ncta">교육 신청</a>
+    </div>
+    <div class="hbg" onclick="toggleM()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mmenu" id="mmenu">
+  <button class="mc" onclick="toggleM()">✕</button>
+  <a onclick="nav2('home')">🏠 홈</a>
+  <a onclick="nav2('about')">🏛️ 연구소 소개</a>
+  <a onclick="nav2('courses')">📚 교육과정</a>
+  <a onclick="nav2('blog')">📰 안전정보</a>
+  <a onclick="nav2('resources')">📂 자료실</a>
+  <a onclick="nav2('notice')">📢 공지사항</a>
+  <a onclick="nav2('contact')">📍 문의/찾아오기</a>
+  <a onclick="nav2('apply')" style="background:var(--gm);color:#fff;text-align:center;border-radius:var(--r);margin-top:8px">✏️ 교육 신청하기</a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- MODAL: 글 작성 -->
+<div class="mo" id="modal-post">
+  <div class="modal">
+    <div class="mh"><h3>새 글 작성</h3><span class="mc2" onclick="closeM('modal-post')">✕</span></div>
+    <div class="mb">
+      <div class="fg"><label class="fl">제목 <span class="req">*</span></label><input type="text" class="fi" id="post-title" placeholder="글 제목"></div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">카테고리</label><select class="fi" id="post-cat"><option>심리·행동 안전</option><option>사고 예방</option><option>계절별 안전</option><option>TBM·안전문화</option><option>법령·공지</option></select></div>
+        <div class="fg"><label class="fl">상태</label><select class="fi" id="post-status"><option>공개</option><option>비공개</option></select></div>
+      </div>
+      <div class="fg"><label class="fl">내용 <span class="req">*</span></label><textarea class="fi" id="post-content" rows="8" placeholder="글 내용"></textarea></div>
+      <div class="fg"><label class="fl">태그 (쉼표 구분)</label><input type="text" class="fi" id="post-tags" placeholder="안전, TBM, 관리감독자"></div>
+    </div>
+    <div class="mf"><button class="bs" onclick="closeM('modal-post')">취소</button><button class="bp" onclick="savePost()">저장</button></div>
+  </div>
+</div>
+
+<!-- MODAL: 수료증 -->
+<div class="mo" id="modal-cert">
+  <div class="modal">
+    <div class="mh"><h3>📄 수료증</h3><span class="mc2" onclick="closeM('modal-cert')">✕</span></div>
+    <div class="mb">
+      <div class="cprev">
+        <div style="font-size:11px;color:var(--g4);margin-bottom:4px">고용노동부 지정 안전보건교육기관</div>
+        <h2 style="font-size:26px;font-weight:900;color:var(--gd);margin-bottom:6px;letter-spacing:4px">수 료 증</h2>
+        <div style="font-size:13px;color:var(--g5);margin-bottom:20px">Certificate of Completion</div>
+        <div style="background:#fff;border:1px solid var(--g2);border-radius:var(--rs);padding:16px;margin-bottom:16px;text-align:left">
+          <div class="crow2"><span class="lbl">성 명</span><strong class="val" id="cert-name">홍길동</strong></div>
+          <div class="crow2"><span class="lbl">교육명</span><strong class="val" id="cert-course">관리감독자 정기 안전보건교육</strong></div>
+          <div class="crow2"><span class="lbl">교육시간</span><strong class="val">16시간</strong></div>
+          <div class="crow2"><span class="lbl">수료일</span><strong class="val" id="cert-date">2026년 05월 07일</strong></div>
+        </div>
+        <p style="font-size:13px;color:var(--g5);margin-bottom:16px">위 사람은 소정의 교육과정을 이수하였기에 이 수료증을 수여합니다.</p>
+        <div style="font-size:14px;font-weight:700;color:var(--gd)">한국산업교육연구소 안전교육센터장</div>
+        <div style="font-size:11px;color:var(--g4);margin-top:6px">수료증번호: <span id="cert-no">KIEI-2026-042</span></div>
+        <div style="margin-top:10px;font-size:10px;color:var(--g4)">📍 부산 북구 금곡대로 458 금곡월드프라자 3층 | ☎ 051-327-5604</div>
+      </div>
+    </div>
+    <div class="mf"><button class="bs" onclick="closeM('modal-cert')">닫기</button><button class="bp" onclick="dlCert()">📥 PDF 다운로드</button></div>
+  </div>
+</div>
+
+<!-- ══ HOME ══ -->
+<div class="page active" id="page-home">
+  <div class="nstrip">
+    <span class="nbadge">공지</span>
+    <p>2026년도 관리감독자 정기 안전보건교육 일정이 공개되었습니다.</p>
+    <a onclick="showPage('notice')">자세히 보기 →</a>
+  </div>
+  <div class="hero">
+    <img class="hi" id="hero-img" src="data:image/jpeg;base64,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" alt="안전교육 현장 — 두 작업자의 신뢰와 협력">
+    <div class="ho"></div>
+    <div class="hc"><div class="hin"><div class="ht">
+      <div class="hbadge">고용노동부 지정 안전보건교육기관 &nbsp;·&nbsp; 교육부 지정 인력개발 평생교육기관</div>
+      <h1>안전한 현장,<br><strong>행복한 세상</strong>을<br>함께 만듭니다</h1>
+      <p class="lead">한국산업교육연구소 안전교육센터</p>
+      <p class="sub">창사 36년 · 영감안전시대 — 마음 + 행동 + 시스템<br>비전과 안정, 신뢰를 바탕으로 안전문화를 선도합니다</p>
+      <div class="hbtns">
+        <button class="bw" onclick="showPage('apply')">✏️ 교육 신청하기</button>
+        <button class="bow" onclick="showPage('courses')">교육과정 보기 →</button>
+      </div>
+      <div class="hstats">
+        <div class="hs"><div class="n">36<span>년</span></div><div class="l">창사 연혁</div></div>
+        <div class="hsd"></div>
+        <div class="hs"><div class="n">2</div><div class="l">정부 지정</div></div>
+        <div class="hsd"></div>
+        <div class="hs"><div class="n">4<span>종</span></div><div class="l">교육 유형</div></div>
+        <div class="hsd"></div>
+        <div class="hs"><div class="n" style="font-size:17px">051-327-5604</div><div class="l">전화 문의</div></div>
+      </div>
+    </div></div></div>
+    <div class="cfl">
+      <div class="cc"><span style="font-size:20px">🏛️</span><div><strong>고용노동부 지정</strong><span>안전보건교육기관</span></div></div>
+      <div class="cc"><span style="font-size:20px">📚</span><div><strong>교육부 지정</strong><span>인력개발 평생교육기관</span></div></div>
+    </div>
+  </div>
+
+  <!-- 교육과정 -->
+  <div class="sec sec-alt"><div class="si">
+    <div class="sh"><div class="st">교육과정 <em>안내</em></div><div class="ss">법정의무교육부터 현장맞춤 특별교육까지 — 산업안전보건법 기반 전문 교육</div></div>
+    <div class="g4">
+      <div class="card" onclick="showPage('courses')"><div class="cb"><div class="ci">🏛️</div><span class="badge bl">법정의무</span><h3>관리감독자 정기<br>안전보건교육</h3><p>연간 16시간 의무. 집체·비대면 선택 가능. 2026년 연간 일정 운영.</p><span class="cl">자세히 보기 →</span></div></div>
+      <div class="card" onclick="showPage('courses')"><div class="cb"><div class="ci">👷</div><span class="badge bl">법정의무</span><h3>근로자<br>안전보건교육</h3><p>신규채용·정기·특별 교육 등 근로자 유형별 맞춤 법정 교육 제공.</p><span class="cl">자세히 보기 →</span></div></div>
+      <div class="card" onclick="showPage('courses')"><div class="cb"><div class="ci">🎯</div><span class="badge bsp">특별교육</span><h3>위험성평가<br>체험학습 과정</h3><p>직접 찾는 교육. 위험예지훈련(KYT) + 위험성평가 실습 4시간 과정.</p><span class="cl">자세히 보기 →</span></div></div>
+      <div class="card" onclick="showPage('courses')"><div class="cb"><div class="ci">🚀</div><span class="badge bc">현장맞춤</span><h3>강사 파견<br>현장방문 교육</h3><p>전문 강사 직접 방문. 업종·인원·일정 맞춤형 교육 및 안전 컨설팅.</p><span class="cl">자세히 보기 →</span></div></div>
+    </div>
+  </div></div>
+
+  <!-- 최신 안전정보 -->
+  <div class="sec"><div class="si">
+    <div class="sh"><div class="st">최신 <em>안전정보</em></div><div class="ss">현장에서 바로 적용할 수 있는 안전 지식과 사례를 꾸준히 공유합니다</div></div>
+    <div class="g3" id="home-posts"></div>
+    <div style="text-align:center;margin-top:28px"><button class="bs" onclick="showPage('blog')">안전정보 전체 보기 →</button></div>
+  </div></div>
+
+  <!-- 대상별 -->
+  <div class="sec sec-g"><div class="si">
+    <div class="sh"><div class="st">이런 분께 <em>추천합니다</em></div><div class="ss">업종과 직책에 관계없이 산업 현장 모든 분을 위한 교육</div></div>
+    <div class="g4">
+      <div class="card"><div class="cb" style="text-align:center"><div style="font-size:36px;margin-bottom:12px">👔</div><h3>관리감독자</h3><p>법정의무 연간 16시간 이수가 필요한 팀장·반장·공장장·현장소장</p></div></div>
+      <div class="card"><div class="cb" style="text-align:center"><div style="font-size:36px;margin-bottom:12px">🏗️</div><h3>사업주·안전담당자</h3><p>중대재해처벌법 대응 및 안전보건관리체계 구축이 필요한 경영진</p></div></div>
+      <div class="card"><div class="cb" style="text-align:center"><div style="font-size:36px;margin-bottom:12px">🔧</div><h3>신규 근로자</h3><p>채용 후 법정 교육이 필요한 신입 사원 및 계약직 근로자 전체</p></div></div>
+      <div class="card"><div class="cb" style="text-align:center"><div style="font-size:36px;margin-bottom:12px">🎓</div><h3>안전 전문 강사</h3><p>2026년 안전문화 확산을 함께 할 전문강사 위촉 모집 진행 중</p></div></div>
+    </div>
+  </div></div>
+
+  <div class="ctab">
+    <h2>교육 문의 및 신청</h2>
+    <p>법정의무교육 일정 확인부터 현장맞춤 강사 파견까지<br>언제든지 편하게 문의하세요</p>
+    <div class="cr">
+      <a href="tel:051-327-5604" class="bw" style="display:inline-flex">📞 051-327-5604</a>
+      <button class="bow" onclick="showPage('apply')">온라인 교육 신청</button>
+      <button class="bow" onclick="showPage('contact')">강사 파견 신청</button>
+    </div>
+  </div>
+
+  <div class="sec"><div class="si"><div class="cg">
+    <div>
+      <div class="st" style="margin-bottom:24px">찾아오시는 <em>길</em></div>
+      <div class="crow"><div class="cbox">📍</div><div><strong>주소</strong><p>부산광역시 북구 금곡대로 458<br>금곡월드프라자 3층 (46509)</p></div></div>
+      <div class="crow"><div class="cbox">📞</div><div><strong>전화 / 팩스</strong><p>051-327-5604 / Fax. 051-322-5604</p></div></div>
+      <div class="crow"><div class="cbox">✉️</div><div><strong>이메일</strong><p>kiei@kiei.or.kr</p></div></div>
+      <div class="crow"><div class="cbox">🕐</div><div><strong>운영시간</strong><p>평일 09:00~18:00 (점심 12:00~13:00)<br>주말·공휴일 휴무</p></div></div>
+      <div class="crow"><div class="cbox">🌐</div><div><strong>블로그</strong><p>blog.naver.com/1990kiei</p></div></div>
+    </div>
+    <div>
+      <div class="mapbox" onclick="window.open('https://map.naver.com/p/entry/place/16501631','_blank')">
+        <span style="font-size:44px">🗺️</span><p>네이버 지도로 보기</p>
+        <span>부산 북구 금곡대로 458 금곡월드프라자 3층</span>
+        <button class="bp bsm" style="margin-top:8px">지도 열기</button>
+      </div>
+      <p style="font-size:11px;color:var(--g4);margin-top:8px;text-align:center">※ 네이버 클라우드 API 키 적용 시 지도가 직접 표시됩니다</p>
+    </div>
+  </div></div></div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<div class="page" id="page-about">
+  <div class="ph"><div class="phi"><div class="bc">홈 > 연구소 소개</div><h1>연구소 소개</h1><p>창사 36년, 신뢰와 전문성으로 산업 현장 안전을 지킵니다</p></div></div>
+  <div class="sec"><div class="si">
+    <div class="g2" style="margin-bottom:48px">
+      <div>
+        <div class="st" style="margin-bottom:16px">한국산업교육연구소 <em>안전교육센터</em></div>
+        <p style="font-size:14px;color:var(--g5);line-height:1.9;margin-bottom:14px">한국산업교육연구소 안전교육센터는 <strong>1990년 창사</strong> 이래 36년간 공공기관 및 각 기업체의 경영 활성화를 위한 교육, 훈련, 컨설팅, 안전 교육을 전문으로 하고 있습니다.</p>
+        <p style="font-size:14px;color:var(--g5);line-height:1.9;margin-bottom:14px"><strong>고용노동부 지정 안전보건교육기관</strong>이자 <strong>교육부 지정 인력개발 평생교육기관</strong>으로서 현장의 실무자를 위한 실질적이고 효과적인 안전교육을 제공합니다.</p>
+        <p style="font-size:14px;color:var(--g5);line-height:1.9">우리가 지향하는 <strong>"영감안전시대"</strong>는 마음(심리) + 행동 + 시스템이 하나로 연결되는 통합적 안전문화입니다.</p>
+      </div>
+      <div style="display:grid;gap:12px">
+        <div class="alert ainfo"><strong>🏛️ 고용노동부</strong> 지정 안전보건교육기관</div>
+        <div class="alert ainfo"><strong>📚 교육부</strong> 지정 인력개발 평생교육기관</div>
+        <div class="alert aok"><strong>⭐ 창사 1990년</strong> — 36년 전통의 신뢰</div>
+        <div class="alert aok"><strong>©️ 저작권 보유</strong> — 독자적 교육 콘텐츠</div>
+      </div>
+    </div>
+    <div class="st" style="margin-bottom:24px">핵심 <em>역량</em></div>
+    <div class="g3" style="margin-bottom:48px">
+      <div class="card"><div class="cb"><div class="ci">🔍</div><h3>안전행동 진단</h3><p>개인 및 집단의 안전행동지수를 관리합니다. 행동 기반 안전 진단 시스템을 운영합니다.</p></div></div>
+      <div class="card"><div class="cb"><div class="ci">🎓</div><h3>전문가 양성반</h3><p>안전담당자 역량 강화 및 진로 지도, 취업 연계까지 지원합니다.</p></div></div>
+      <div class="card"><div class="cb"><div class="ci">🤝</div><h3>사회봉사 활동</h3><p>사회단체 및 전문가들과 취약계층을 위한 안전 봉사 활동을 지속합니다.</p></div></div>
+    </div>
+    <div class="ac" style="background:linear-gradient(135deg,var(--gl),var(--gp));border-color:var(--gi)">
+      <h3 style="color:var(--gd);border-color:var(--gi)">💡 영감안전시대 (KIEI 핵심 철학)</h3>
+      <div class="g3">
+        <div style="text-align:center;padding:16px"><div style="font-size:36px;margin-bottom:10px">🧠</div><strong style="color:var(--gd)">마음 (심리)</strong><p style="font-size:13px;color:var(--g5);margin-top:8px">안전을 보는 마음 훈련. 위험 인지의 심리적 기반 형성.</p></div>
+        <div style="text-align:center;padding:16px"><div style="font-size:36px;margin-bottom:10px">🏃</div><strong style="color:var(--gd)">행동</strong><p style="font-size:13px;color:var(--g5);margin-top:8px">반복 훈련을 통한 안전 행동 습관화. 불안전행동 개선.</p></div>
+        <div style="text-align:center;padding:16px"><div style="font-size:36px;margin-bottom:10px">⚙️</div><strong style="color:var(--gd)">시스템</strong><p style="font-size:13px;color:var(--g5);margin-top:8px">안전관리 체계 구축. 위험성 평가 및 TBM 문화 정착.</p></div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ COURSES ══ -->
+<div class="page" id="page-courses">
+  <div class="ph"><div class="phi"><div class="bc">홈 > 교육과정</div><h1>교육과정</h1><p>법정의무교육부터 체험학습, 현장파견까지 다양한 교육 제공</p></div></div>
+  <div class="sec"><div class="si">
+    <div class="tabs">
+      <button class="tb active" onclick="switchTab(this,'t-legal')">법정안전교육</button>
+      <button class="tb" onclick="switchTab(this,'t-special')">특별교육</button>
+      <button class="tb" onclick="switchTab(this,'t-field')">현장파견</button>
+      <button class="tb" onclick="switchTab(this,'t-cal')">교육 일정 캘린더</button>
+      <button class="tb" onclick="switchTab(this,'t-calc')">법정교육 계산기</button>
+    </div>
+    <div class="tpanel active" id="t-legal">
+      <div class="g2">
+        <div class="card"><div class="cb"><span class="badge bl">법정의무</span><h3 style="font-size:17px">관리감독자 정기 안전보건교육</h3><p>산업안전보건법에 따라 의무 이수.</p>
+          <div style="background:var(--g1);border-radius:var(--rs);padding:14px;margin:16px 0;font-size:13px">
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--g2)"><span style="color:var(--g5)">교육 대상</span><span style="font-weight:600">팀장·반장·공장장·현장소장</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--g2)"><span style="color:var(--g5)">교육 시간</span><span style="font-weight:600">연간 16시간</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--g2)"><span style="color:var(--g5)">교육 방법</span><span style="font-weight:600">집체교육 / 비대면교육</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:var(--g5)">미이수 시</span><span style="font-weight:600;color:var(--ar)">500만원 이하 과태료</span></div>
+          </div>
+          <button class="bp" onclick="showPage('apply')">교육 신청하기</button>
+        </div></div>
+        <div class="card"><div class="cb"><span class="badge bl">법정의무</span><h3 style="font-size:17px">근로자 안전보건교육</h3><p>근로자 유형별 법정 안전보건교육.</p>
+          <div style="background:var(--g1);border-radius:var(--rs);padding:14px;margin:16px 0;font-size:13px">
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--g2)"><span style="color:var(--g5)">정기교육</span><span style="font-weight:600">매 분기 6시간 이상</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--g2)"><span style="color:var(--g5)">채용 시</span><span style="font-weight:600">8시간 이상</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--g2)"><span style="color:var(--g5)">작업 변경 시</span><span style="font-weight:600">2시간 이상</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:var(--g5)">교육 방법</span><span style="font-weight:600">집체 / 현장 / 온라인</span></div>
+          </div>
+          <button class="bp" onclick="showPage('apply')">교육 신청하기</button>
+        </div></div>
+      </div>
+    </div>
+    <div class="tpanel" id="t-special">
+      <div class="g3">
+        <div class="card"><div class="cb"><div class="ci">🎯</div><span class="badge bsp">특별교육</span><h3>위험예지훈련(KYT)<br>위험성평가 실습</h3><p>직접 찾는 교육. 참여·체험·실습 중심 4시간 과정.</p><button class="bp bsm" onclick="showPage('apply')">신청하기</button></div></div>
+        <div class="card"><div class="cb"><div class="ci">🧠</div><span class="badge bsp">특별교육</span><h3>인지행동치료(CBT)<br>기반 안전교육</h3><p>행동이 아닌 '생각'을 바꿉니다. 사고 후 심리 위축 작업자 지원.</p><button class="bp bsm" onclick="showPage('apply')">신청하기</button></div></div>
+        <div class="card"><div class="cb"><div class="ci">📜</div><span class="badge bsp">특별교육</span><h3>저작권·인권존중<br>법정교육</h3><p>개인정보보호, 성희롱 예방, 장애인 인식개선 등 법정의무 과정.</p><button class="bp bsm" onclick="showPage('apply')">신청하기</button></div></div>
+      </div>
+    </div>
+    <div class="tpanel" id="t-field">
+      <div class="g2">
+        <div>
+          <div class="st" style="margin-bottom:16px">강사 파견 <em>현장방문 교육</em></div>
+          <p style="font-size:14px;color:var(--g5);line-height:1.9;margin-bottom:20px">전문 강사가 직접 사업장을 방문하여 업종·인원·일정에 맞는 맞춤형 교육을 제공합니다.</p>
+          <div class="alert ainfo">현장 상황에 맞는 커리큘럼을 별도 협의하여 구성합니다.</div>
+          <div style="margin-top:16px">
+            <div style="display:flex;gap:8px;margin-bottom:10px;font-size:14px"><span>✅</span><span>집체·현장·온라인·비대면·맞춤형 교육</span></div>
+            <div style="display:flex;gap:8px;margin-bottom:10px;font-size:14px"><span>✅</span><span>안전행동 컨설팅 / 강사 섭외</span></div>
+            <div style="display:flex;gap:8px;font-size:14px"><span>✅</span><span>교육 후 수료증 발급</span></div>
+          </div>
+        </div>
+        <div class="ac">
+          <h3>강사 파견 신청</h3>
+          <div class="fg"><label class="fl">회사명 <span class="req">*</span></label><input type="text" class="fi" id="fp-co" placeholder="회사명"></div>
+          <div class="fr2">
+            <div class="fg"><label class="fl">담당자 <span class="req">*</span></label><input type="text" class="fi" id="fp-name" placeholder="이름"></div>
+            <div class="fg"><label class="fl">연락처 <span class="req">*</span></label><input type="tel" class="fi" id="fp-phone" placeholder="010-0000-0000"></div>
+          </div>
+          <div class="fr2">
+            <div class="fg"><label class="fl">희망 인원</label><input type="number" class="fi" id="fp-cnt" placeholder="명"></div>
+            <div class="fg"><label class="fl">희망 날짜</label><input type="date" class="fi" id="fp-date"></div>
+          </div>
+          <div class="fg"><label class="fl">교육 내용</label><textarea class="fi" id="fp-content" rows="3" placeholder="교육 내용 및 요청사항"></textarea></div>
+          <button class="bp" style="width:100%" onclick="submitForm('강사 파견 신청')">신청 완료</button>
+        </div>
+      </div>
+    </div>
+    <div class="tpanel" id="t-cal"><div id="cal-wrap"></div></div>
+    <div class="tpanel" id="t-calc">
+      <div class="g2">
+        <div class="card"><div class="cb">
+          <div class="ci">🧮</div>
+          <h3 style="font-size:17px">법정의무교육 계산기</h3>
+          <p style="margin-bottom:20px">직종을 선택하면 필요한 법정 교육 목록을 자동으로 안내해드립니다.</p>
+          <div class="fg"><label class="fl">직종 선택 <span class="req">*</span></label>
+            <select class="fi" id="calc-role" onchange="calcEdu()">
+              <option value="">-- 선택 --</option>
+              <option value="sup">관리감독자 (팀장·반장·공장장 등)</option>
+              <option value="wk">일반 근로자</option>
+              <option value="nw">신규 채용자</option>
+              <option value="own">사업주·안전담당자</option>
+            </select>
+          </div>
+        </div></div>
+        <div id="calc-result" style="display:none"><div class="card"><div class="cb" id="calc-body"></div></div></div>
+        <div id="calc-empty" style="display:flex;align-items:center;justify-content:center;background:var(--g1);border-radius:var(--r);border:2px dashed var(--g2);padding:40px;text-align:center">
+          <div><div style="font-size:48px;margin-bottom:12px">🧮</div><p style="color:var(--g4);font-size:14px">직종을 선택하면<br>필요한 교육이 표시됩니다</p></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ BLOG ══ -->
+<div class="page" id="page-blog">
+  <div class="ph"><div class="phi"><div class="bc">홈 > 안전정보</div><h1>안전정보</h1><p>현장에서 바로 적용할 수 있는 안전 지식과 사례</p></div></div>
+  <div class="sec"><div class="si">
+    <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;align-items:center">
+      <input type="text" class="fi" placeholder="🔍 키워드 검색..." style="max-width:280px" oninput="filterBlog(this.value)">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="bp bsm" onclick="filterCat('전체')">전체</button>
+        <button class="bs bsm" onclick="filterCat('심리·행동 안전')">심리·행동</button>
+        <button class="bs bsm" onclick="filterCat('사고 예방')">사고예방</button>
+        <button class="bs bsm" onclick="filterCat('계절별 안전')">계절별</button>
+        <button class="bs bsm" onclick="filterCat('TBM·안전문화')">TBM</button>
+        <button class="bs bsm" onclick="filterCat('법령·공지')">법령</button>
+      </div>
+    </div>
+    <div class="g3" id="blog-grid"></div>
+  </div></div>
+</div>
+
+<!-- BLOG DETAIL -->
+<div class="page" id="page-blog-detail">
+  <div class="sec"><div class="si" style="max-width:760px">
+    <button onclick="showPage('blog')" style="display:flex;align-items:center;gap:6px;color:var(--gm);font-weight:600;font-size:13px;margin-bottom:24px;background:none;border:none;cursor:pointer">← 목록으로</button>
+    <div id="blog-detail-content"></div>
+  </div></div>
+</div>
+
+<!-- ══ RESOURCES ══ -->
+<div class="page" id="page-resources">
+  <div class="ph"><div class="phi"><div class="bc">홈 > 자료실</div><h1>자료실</h1><p>법령 자료, 교육 교안, 안전 매뉴얼 다운로드</p></div></div>
+  <div class="sec"><div class="si">
+    <div class="ac"><h3>📂 자료 목록</h3>
+      <div class="tw"><table><thead><tr><th>번호</th><th>자료명</th><th>분류</th><th>파일</th><th>다운로드</th><th>등록일</th></tr></thead>
+      <tbody id="res-table"></tbody></table></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ NOTICE ══ -->
+<div class="page" id="page-notice">
+  <div class="ph"><div class="phi"><div class="bc">홈 > 공지사항</div><h1>공지사항</h1></div></div>
+  <div class="sec"><div class="si">
+    <div class="tw"><table><thead><tr><th>번호</th><th>제목</th><th>날짜</th><th>조회</th></tr></thead>
+    <tbody id="notice-table"></tbody></table></div>
+  </div></div>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<div class="page" id="page-contact">
+  <div class="ph"><div class="phi"><div class="bc">홈 > 문의/찾아오기</div><h1>문의 / 찾아오기</h1><p>교육 신청, 강사 파견, 제휴 등 모든 문의를 받습니다</p></div></div>
+  <div class="sec"><div class="si">
+    <div class="cg" style="margin-bottom:40px">
+      <div>
+        <div class="st" style="margin-bottom:24px">연락처 <em>정보</em></div>
+        <div class="crow"><div class="cbox">📍</div><div><strong>주소</strong><p>부산광역시 북구 금곡대로 458<br>금곡월드프라자 3층 (46509)</p></div></div>
+        <div class="crow"><div class="cbox">📞</div><div><strong>전화</strong><p>051-327-5604</p></div></div>
+        <div class="crow"><div class="cbox">📠</div><div><strong>팩스</strong><p>051-322-5604</p></div></div>
+        <div class="crow"><div class="cbox">✉️</div><div><strong>이메일</strong><p>kiei@kiei.or.kr</p></div></div>
+        <div class="crow"><div class="cbox">🕐</div><div><strong>운영시간</strong><p>평일 09:00~18:00 / 주말·공휴일 휴무</p></div></div>
+      </div>
+      <div>
+        <div class="mapbox" onclick="window.open('https://map.naver.com/p/entry/place/16501631','_blank')">
+          <span style="font-size:44px">🗺️</span><p>네이버 지도로 보기</p>
+          <span>클릭하면 네이버 지도가 열립니다</span>
+          <button class="bp bsm" style="margin-top:8px">지도 열기</button>
+        </div>
+      </div>
+    </div>
+    <div class="ac">
+      <h3>📬 온라인 문의</h3>
+      <div class="fr2">
+        <div class="fg"><label class="fl">이름 <span class="req">*</span></label><input type="text" class="fi" id="c-name" placeholder="이름"></div>
+        <div class="fg"><label class="fl">회사명</label><input type="text" class="fi" id="c-co" placeholder="회사명"></div>
+      </div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">연락처 <span class="req">*</span></label><input type="tel" class="fi" id="c-phone" placeholder="010-0000-0000"></div>
+        <div class="fg"><label class="fl">이메일</label><input type="email" class="fi" id="c-email" placeholder="example@email.com"></div>
+      </div>
+      <div class="fg"><label class="fl">문의 유형</label>
+        <select class="fi" id="c-type"><option>일반 문의</option><option>교육 신청</option><option>강사 파견</option><option>제휴 문의</option><option>강사 지원</option></select>
+      </div>
+      <div class="fg"><label class="fl">문의 내용 <span class="req">*</span></label><textarea class="fi" id="c-content" rows="5" placeholder="문의 내용을 자세히 입력해주세요"></textarea></div>
+      <button class="bp" onclick="submitContact()">문의 접수하기</button>
+    </div>
+    <div class="st" style="margin:40px 0 20px">자주 묻는 <em>질문</em></div>
+    <div id="faq-list"></div>
+  </div></div>
+</div>
+
+<!-- ══ APPLY ══ -->
+<div class="page" id="page-apply">
+  <div class="ph"><div class="phi"><div class="bc">홈 > 교육 신청</div><h1>교육 신청</h1><p>회원가입 후 교육을 신청하시면 이메일로 확인서가 발송됩니다</p></div></div>
+  <div class="sec"><div class="si" style="max-width:680px">
+    <div id="apply-login" style="display:none">
+      <div class="alert ainfo">교육 신청은 회원 로그인 후 이용하실 수 있습니다.</div>
+      <button class="bp" onclick="showPage('login')">로그인 / 회원가입</button>
+    </div>
+    <div id="apply-form">
+      <div class="ac">
+        <h3>✏️ 교육 신청서</h3>
+        <div class="fg"><label class="fl">교육 과정 <span class="req">*</span></label>
+          <select class="fi" id="a-course">
+            <option value="">-- 교육 과정 선택 --</option>
+            <option>관리감독자 정기 안전보건교육 (집체)</option>
+            <option>관리감독자 정기 안전보건교육 (비대면)</option>
+            <option>근로자 안전보건교육 (정기)</option>
+            <option>근로자 안전보건교육 (신규채용자)</option>
+            <option>위험성평가 체험학습 과정</option>
+            <option>인지행동치료(CBT) 기반 안전교육</option>
+            <option>강사 파견 현장방문 교육</option>
+          </select>
+        </div>
+        <div class="fr2">
+          <div class="fg"><label class="fl">신청자 이름 <span class="req">*</span></label><input type="text" class="fi" id="a-name" placeholder="이름"></div>
+          <div class="fg"><label class="fl">소속 회사 <span class="req">*</span></label><input type="text" class="fi" id="a-co" placeholder="회사명"></div>
+        </div>
+        <div class="fr2">
+          <div class="fg"><label class="fl">직책</label><input type="text" class="fi" id="a-pos" placeholder="직책"></div>
+          <div class="fg"><label class="fl">참가 인원</label><input type="number" class="fi" id="a-cnt" placeholder="1" min="1"></div>
+        </div>
+        <div class="fr2">
+          <div class="fg"><label class="fl">연락처 <span class="req">*</span></label><input type="tel" class="fi" id="a-phone" placeholder="010-0000-0000"></div>
+          <div class="fg"><label class="fl">이메일 <span class="req">*</span></label><input type="email" class="fi" id="a-email" placeholder="example@email.com"></div>
+        </div>
+        <div class="fg"><label class="fl">희망 일정</label><input type="date" class="fi" id="a-date"></div>
+        <div class="fg"><label class="fl">요청사항</label><textarea class="fi" id="a-memo" rows="3" placeholder="특별 요청사항 (선택)"></textarea></div>
+        <div class="alert ainfo">신청 완료 후 이메일로 확인서가 발송됩니다. 관리자 승인 후 최종 확정됩니다.</div>
+        <button class="bp" style="width:100%;padding:15px" onclick="submitApply()">교육 신청 완료</button>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ LOGIN ══ -->
+<div class="page" id="page-login">
+  <div class="sec"><div class="si" style="max-width:420px">
+    <div class="ac">
+      <div style="text-align:center;margin-bottom:28px">
+        <img id="login-logo" src="data:image/png;base64,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" alt="KIEI" style="width:80px;height:56px;object-fit:contain;margin:0 auto 12px">
+        <h2 style="font-size:20px;font-weight:800;color:var(--gd)">로그인</h2>
+        <p style="font-size:13px;color:var(--g4);margin-top:4px">한국산업교육연구소 안전교육센터</p>
+      </div>
+      <div class="fg"><label class="fl">이메일</label><input type="email" class="fi" id="l-email" placeholder="이메일 입력"></div>
+      <div class="fg"><label class="fl">비밀번호</label><input type="password" class="fi" id="l-pw" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="bp" style="width:100%;padding:13px;margin-bottom:12px" onclick="doLogin()">로그인</button>
+      <div style="text-align:center;font-size:13px;color:var(--g5)">계정이 없으신가요? <a onclick="showPage('register')" style="color:var(--gm);font-weight:600;cursor:pointer">회원가입</a></div>
+      <div style="text-align:center;margin-top:8px"><a onclick="showPage('admin-login')" style="color:var(--g4);cursor:pointer;font-size:12px">관리자 로그인</a></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ REGISTER ══ -->
+<div class="page" id="page-register">
+  <div class="sec"><div class="si" style="max-width:480px">
+    <div class="ac">
+      <div style="text-align:center;margin-bottom:24px">
+        <h2 style="font-size:20px;font-weight:800;color:var(--gd)">회원가입</h2>
+        <p style="font-size:13px;color:var(--g4)">교육 신청을 위해 회원가입이 필요합니다</p>
+      </div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">이름 <span class="req">*</span></label><input type="text" class="fi" id="r-name" placeholder="이름"></div>
+        <div class="fg"><label class="fl">연락처 <span class="req">*</span></label><input type="tel" class="fi" id="r-phone" placeholder="010-0000-0000"></div>
+      </div>
+      <div class="fg"><label class="fl">이메일 <span class="req">*</span></label><input type="email" class="fi" id="r-email" placeholder="이메일 입력"></div>
+      <div class="fg"><label class="fl">비밀번호 <span class="req">*</span></label><input type="password" class="fi" id="r-pw" placeholder="8자 이상"></div>
+      <div class="fg"><label class="fl">비밀번호 확인 <span class="req">*</span></label><input type="password" class="fi" id="r-pw2" placeholder="비밀번호 재입력"></div>
+      <div class="fg"><label class="fl">소속 회사</label><input type="text" class="fi" id="r-co" placeholder="회사명 (선택)"></div>
+      <button class="bp" style="width:100%;padding:13px;margin-bottom:12px" onclick="doRegister()">회원가입 완료</button>
+      <div style="text-align:center;font-size:13px;color:var(--g5)">이미 계정이 있으신가요? <a onclick="showPage('login')" style="color:var(--gm);font-weight:600;cursor:pointer">로그인</a></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ MYPAGE ══ -->
+<div class="page" id="page-mypage">
+  <div class="mlayout">
+    <div class="msb">
+      <div class="mav">👤</div>
+      <div class="mname" id="my-name">홍길동</div>
+      <div class="mrole">일반 회원</div>
+      <div class="mnav">
+        <a onclick="switchMy('my-enroll',this)" class="active">📋 수강 신청 내역</a>
+        <a onclick="switchMy('my-cert',this)">📄 수료증 발급</a>
+        <a onclick="switchMy('my-profile',this)">⚙️ 프로필 수정</a>
+        <a onclick="doLogout()" style="color:var(--ar);margin-top:8px">🚪 로그아웃</a>
+      </div>
+    </div>
+    <div>
+      <div id="my-enroll">
+        <div class="ah"><h2>수강 신청 내역</h2></div>
+        <div class="tw"><table><thead><tr><th>교육 과정</th><th>신청일</th><th>상태</th><th>수료증</th></tr></thead><tbody id="my-enroll-table"></tbody></table></div>
+      </div>
+      <div id="my-cert" style="display:none">
+        <div class="ah"><h2>수료증 발급</h2></div>
+        <div id="my-cert-list"></div>
+      </div>
+      <div id="my-profile" style="display:none">
+        <div class="ah"><h2>프로필 수정</h2></div>
+        <div class="ac">
+          <div class="fr2">
+            <div class="fg"><label class="fl">이름</label><input type="text" class="fi" id="pf-name"></div>
+            <div class="fg"><label class="fl">연락처</label><input type="tel" class="fi" id="pf-phone"></div>
+          </div>
+          <div class="fg"><label class="fl">이메일</label><input type="email" class="fi" id="pf-email"></div>
+          <div class="fg"><label class="fl">소속 회사</label><input type="text" class="fi" id="pf-co"></div>
+          <button class="bp" onclick="saveProfile()">저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN LOGIN ══ -->
+<div class="page" id="page-admin-login">
+  <div class="sec"><div class="si" style="max-width:380px">
+    <div class="ac">
+      <div style="text-align:center;margin-bottom:24px"><div style="font-size:36px;margin-bottom:8px">🔐</div><h2 style="font-size:18px;font-weight:800;color:var(--gd)">관리자 로그인</h2></div>
+      <div class="fg"><label class="fl">관리자 ID</label><input type="text" class="fi" id="adm-id" placeholder="admin"></div>
+      <div class="fg"><label class="fl">비밀번호</label><input type="password" class="fi" id="adm-pw" placeholder="비밀번호" onkeydown="if(event.key==='Enter')doAdminLogin()"></div>
+      <button class="bp" style="width:100%;padding:13px" onclick="doAdminLogin()">관리자 로그인</button>
+      <p style="font-size:11px;color:var(--g4);text-align:center;margin-top:12px">데모: ID=admin / PW=kiei2026</p>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ ADMIN ══ -->
+<div class="page" id="page-admin">
+  <div class="alayout">
+    <div class="aside">
+      <h4>KIEI 관리자</h4>
+      <a onclick="switchAdm('adm-dash',this)" class="active"><span>📊</span>대시보드</a>
+      <a onclick="switchAdm('adm-content',this)"><span>📝</span>콘텐츠 관리</a>
+      <a onclick="switchAdm('adm-courses',this)"><span>📚</span>교육과정 관리</a>
+      <a onclick="switchAdm('adm-enroll',this)"><span>✏️</span>수강 신청 관리</a>
+      <a onclick="switchAdm('adm-users',this)"><span>👥</span>회원 관리</a>
+      <a onclick="switchAdm('adm-res',this)"><span>📂</span>자료실 관리</a>
+      <a onclick="switchAdm('adm-notice',this)"><span>📢</span>공지사항</a>
+      <a onclick="switchAdm('adm-stats',this)"><span>📈</span>통계</a>
+      <a onclick="switchAdm('adm-cert',this)"><span>📄</span>수료증 발급</a>
+      <a onclick="switchAdm('adm-settings',this)"><span>⚙️</span>설정/디자인</a>
+      <a onclick="doAdminLogout()" style="color:rgba(255,100,100,0.8);margin-top:auto"><span>🚪</span>로그아웃</a>
+    </div>
+    <div class="amain">
+      <!-- 대시보드 -->
+      <div id="adm-dash" class="adm-panel">
+        <div class="ah"><h2>📊 대시보드</h2><span style="font-size:12px;color:var(--g4)">실시간 현황</span></div>
+        <div class="scards">
+          <div class="scard"><div class="sn">247</div><div class="sl">이번달 방문자</div><div class="sc">↑ 12% 지난달 대비</div></div>
+          <div class="scard"><div class="sn">18</div><div class="sl">이번달 신청</div><div class="sc">↑ 3건 지난달 대비</div></div>
+          <div class="scard"><div class="sn">3</div><div class="sl">미처리 문의</div><div class="sc" style="color:var(--ar)">처리 필요</div></div>
+          <div class="scard"><div class="sn">42</div><div class="sl">누적 수료자</div><div class="sc">↑ 5명 추가</div></div>
+        </div>
+        <div class="g2">
+          <div class="ac"><h3>📈 방문자 추이 (최근 7일)</h3><div class="cbw" id="visit-chart"></div></div>
+          <div class="aibox">
+            <h4>💡 AI 자동 분석 인사이트</h4>
+            <div class="aii">'관리감독자 교육' 이탈률 72% → 비용·일정을 상단에 노출하면 개선됩니다.</div>
+            <div class="aii">모바일 방문자 58%, 신청 완료율 14% (PC 38%) → 모바일 폼 UX 점검 권장.</div>
+            <div class="aii">검색 유입 1위: '부산 관리감독자 교육' → 관련 블로그 글 추가 작성 권장.</div>
+            <div class="aii">TBM 관련 글 조회 급상승 → 후속 콘텐츠 발행 기회입니다.</div>
+          </div>
+        </div>
+        <div class="ac"><h3>📋 최근 수강 신청</h3>
+          <div class="tw"><table><thead><tr><th>신청자</th><th>교육 과정</th><th>신청일</th><th>상태</th><th>처리</th></tr></thead><tbody id="adm-recent"></tbody></table></div>
+        </div>
+      </div>
+      <div id="adm-content" class="adm-panel" style="display:none">
+        <div class="ah"><h2>📝 콘텐츠 관리</h2><button class="bp bsm" onclick="openM('modal-post')">+ 새 글 작성</button></div>
+        <div class="tw"><table><thead><tr><th>제목</th><th>카테고리</th><th>상태</th><th>조회</th><th>작성일</th><th>관리</th></tr></thead><tbody id="adm-content-table"></tbody></table></div>
+      </div>
+      <div id="adm-courses" class="adm-panel" style="display:none">
+        <div class="ah"><h2>📚 교육과정 관리</h2><button class="bp bsm" onclick="showToast('교육과정 추가')">+ 교육 추가</button></div>
+        <div class="tw"><table><thead><tr><th>교육명</th><th>유형</th><th>일정</th><th>정원</th><th>신청</th><th>상태</th><th>관리</th></tr></thead><tbody id="adm-courses-table"></tbody></table></div>
+      </div>
+      <div id="adm-enroll" class="adm-panel" style="display:none">
+        <div class="ah"><h2>✏️ 수강 신청 관리</h2></div>
+        <div class="tw"><table><thead><tr><th>신청자</th><th>회사</th><th>교육 과정</th><th>연락처</th><th>신청일</th><th>상태</th><th>처리</th></tr></thead><tbody id="adm-enroll-table"></tbody></table></div>
+      </div>
+      <div id="adm-users" class="adm-panel" style="display:none">
+        <div class="ah"><h2>👥 회원 관리</h2></div>
+        <div class="tw"><table><thead><tr><th>이름</th><th>이메일</th><th>연락처</th><th>가입일</th><th>신청수</th><th>권한</th><th>관리</th></tr></thead><tbody id="adm-users-table"></tbody></table></div>
+      </div>
+      <div id="adm-res" class="adm-panel" style="display:none">
+        <div class="ah"><h2>📂 자료실 관리</h2><button class="bp bsm" onclick="showToast('파일 업로드 (Supabase Storage 연동 후 실제 업로드)')">+ 파일 업로드</button></div>
+        <div class="tw"><table><thead><tr><th>자료명</th><th>분류</th><th>파일</th><th>다운로드</th><th>등록일</th><th>관리</th></tr></thead><tbody id="adm-res-table"></tbody></table></div>
+      </div>
+      <div id="adm-notice" class="adm-panel" style="display:none">
+        <div class="ah"><h2>📢 공지사항</h2><button class="bp bsm" onclick="showToast('공지 등록')">+ 공지 등록</button></div>
+        <div class="tw"><table><thead><tr><th>제목</th><th>고정</th><th>날짜</th><th>관리</th></tr></thead><tbody id="adm-notice-table"></tbody></table></div>
+      </div>
+      <div id="adm-stats" class="adm-panel" style="display:none">
+        <div class="ah"><h2>📈 통계</h2></div>
+        <div class="scards">
+          <div class="scard"><div class="sn">1,842</div><div class="sl">이번달 페이지뷰</div></div>
+          <div class="scard"><div class="sn">247</div><div class="sl">순방문자</div></div>
+          <div class="scard"><div class="sn">3분42초</div><div class="sl">평균 체류시간</div></div>
+          <div class="scard"><div class="sn">58%</div><div class="sl">모바일 비율</div></div>
+        </div>
+        <div class="g2">
+          <div class="ac"><h3>인기 페이지 TOP 5</h3><div class="cbw">
+            <div class="cbi"><span class="cbl">홈</span><div class="cbt"><div class="cbf" style="width:100%"><span>312</span></div></div></div>
+            <div class="cbi"><span class="cbl">교육과정</span><div class="cbt"><div class="cbf" style="width:72%"><span>225</span></div></div></div>
+            <div class="cbi"><span class="cbl">안전정보</span><div class="cbt"><div class="cbf" style="width:58%"><span>181</span></div></div></div>
+            <div class="cbi"><span class="cbl">교육신청</span><div class="cbt"><div class="cbf" style="width:40%"><span>124</span></div></div></div>
+            <div class="cbi"><span class="cbl">문의</span><div class="cbt"><div class="cbf" style="width:28%"><span>87</span></div></div></div>
+          </div></div>
+          <div class="ac"><h3>유입 경로</h3><div class="cbw">
+            <div class="cbi"><span class="cbl">직접 방문</span><div class="cbt"><div class="cbf" style="width:45%"><span>45%</span></div></div></div>
+            <div class="cbi"><span class="cbl">네이버 검색</span><div class="cbt"><div class="cbf" style="width:32%"><span>32%</span></div></div></div>
+            <div class="cbi"><span class="cbl">블로그</span><div class="cbt"><div class="cbf" style="width:18%"><span>18%</span></div></div></div>
+            <div class="cbi"><span class="cbl">기타</span><div class="cbt"><div class="cbf" style="width:5%"><span>5%</span></div></div></div>
+          </div></div>
+        </div>
+      </div>
+      <div id="adm-cert" class="adm-panel" style="display:none">
+        <div class="ah"><h2>📄 수료증 발급</h2></div>
+        <div class="tw"><table><thead><tr><th>수강자</th><th>교육 과정</th><th>수료일</th><th>수료증번호</th><th>발급</th></tr></thead><tbody id="adm-cert-table"></tbody></table></div>
+      </div>
+      <div id="adm-settings" class="adm-panel" style="display:none">
+        <div class="ah"><h2>⚙️ 설정 / 디자인 커스터마이징</h2></div>
+        <div class="g2">
+          <div class="ac"><h3>🎨 색상 설정</h3>
+            <div class="fg"><label class="fl">대표 색상</label>
+              <div style="display:flex;gap:10px;align-items:center">
+                <input type="color" value="#2A7D3B" id="c-primary" oninput="applyColor(this.value)" style="width:48px;height:36px;border:none;cursor:pointer;border-radius:4px">
+                <span id="c-hex" style="font-size:13px;color:var(--g5)">#2A7D3B</span>
+              </div>
+            </div>
+            <div class="fg"><label class="fl">메인 배너 문구</label><input type="text" class="fi" value="비전과 안정, 신뢰를 바탕으로 안전문화를 선도합니다" id="banner-txt"></div>
+            <div class="fg"><label class="fl">운영시간</label><input type="text" class="fi" value="평일 09:00 ~ 18:00" id="hours-txt"></div>
+            <button class="bp" onclick="saveSettings()">설정 저장</button>
+          </div>
+          <div class="ac"><h3>📢 팝업 공지</h3>
+            <div class="fg"><label class="fl">팝업 활성화</label>
+              <div style="display:flex;align-items:center;gap:10px">
+                <input type="checkbox" id="popup-on" style="width:18px;height:18px;cursor:pointer">
+                <label for="popup-on" style="font-size:13px;cursor:pointer">팝업 ON/OFF</label>
+              </div>
+            </div>
+            <div class="fg"><label class="fl">팝업 내용</label><textarea class="fi" rows="3">2026년 관리감독자 교육 신청을 받고 있습니다!</textarea></div>
+            <button class="bp" onclick="showToast('팝업 설정이 저장되었습니다')">저장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="finner">
+    <div class="ftop">
+      <div class="fbrand">
+        <div class="fn">한국산업교육연구소 안전교육센터</div>
+        <div class="fs">안전한 현장, 행복한 세상</div>
+        <div class="fc2">
+          <p>· 고용노동부 지정 안전보건교육기관</p>
+          <p>· 교육부 지정 인력개발 평생교육기관</p>
+          <p>· 창사 1990년 (36년 전통)</p>
+        </div>
+      </div>
+      <div class="fcol">
+        <h5>교육과정</h5>
+        <a onclick="showPage('courses')">관리감독자 정기교육</a>
+        <a onclick="showPage('courses')">근로자 안전보건교육</a>
+        <a onclick="showPage('courses')">특별교육·체험학습</a>
+        <a onclick="showPage('courses')">강사파견 현장교육</a>
+      </div>
+      <div class="fcol">
+        <h5>안내</h5>
+        <a onclick="showPage('about')">연구소 소개</a>
+        <a onclick="showPage('blog')">안전정보 블로그</a>
+        <a onclick="showPage('resources')">자료실</a>
+        <a onclick="showPage('notice')">공지사항</a>
+      </div>
+      <div class="fcol fcon">
+        <h5>연락처</h5>
+        <p>전화 문의</p>
+        <div class="tel">051-327-5604</div>
+        <p>Fax. 051-322-5604</p>
+        <p>kiei@kiei.or.kr</p>
+        <p style="margin-top:8px;font-size:11px;color:rgba(255,255,255,0.4)">부산 북구 금곡대로 458<br>금곡월드프라자 3층</p>
+      </div>
+    </div>
+    <div class="fbot">
+      <p>© 2026 한국산업교육연구소 안전교육센터. All rights reserved.</p>
+      <div class="fbl">
+        <a>개인정보처리방침</a>
+        <a>이용약관</a>
+        <a href="https://blog.naver.com/1990kiei" target="_blank">네이버 블로그</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="mcta"><a href="tel:051-327-5604">📞 051-327-5604 &nbsp;|&nbsp; 교육 신청하기</a></div>
+
+<script>
+const S={user:null,isAdmin:false,posts:[],courses:[],enrollments:[],users:[],resources:[],notices:[],certs:[]};
+
+function seed(){
+  S.posts=[
+    {id:'p1',title:'좋은 사람이 사고를 당했습니다 – NP 자아상태가 높은 사람의 안전 이야기',cat:'심리·행동 안전',date:'2026.05.05',ex:'배려가 침묵이 되는 순간, 사고는 시작됩니다. NP 자아상태를 강점으로 전환하는 방법.',tags:['안전심리','관리감독자'],icon:'🧠',views:142,status:'공개',content:'현장에서 발생하는 사고는 단순히 몰라서 생기는 경우보다, 알고도 말하지 못해서 발생하는 경우가 훨씬 많습니다.\n\nNP(Nurturing Parent, 양육적 부모 자아)가 높은 사람은 상대방을 배려하고 도움을 주는 것을 자연스럽게 여깁니다. 그런데 이 배려가 안전 상황에서는 침묵으로 이어질 수 있습니다.\n\n■ 배려가 침묵이 되는 순간\n"저 사람이 힘들어 보이는데 내가 또 지적하면 상처받지 않을까?"\n"모두가 빨리 끝내고 싶어하는데 내가 안전 문제를 제기하면 분위기가 나빠지지 않을까?"\n\n■ 핵심은 성격이 아니라 방향\nNP 자아상태 자체가 문제가 아닙니다. 그 에너지를 어느 방향으로 쓰느냐가 핵심입니다.\n배려를 침묵이 아닌 안전한 발언으로 표현하는 훈련이 한국산업교육연구소 심리 기반 안전교육의 핵심입니다.'},
+    {id:'p2',title:'올바른 보호구 착용, 이렇게 바뀌어야 합니다',cat:'사고 예방',date:'2026.05.03',ex:'착용만 하면 끝일까? 형식적 착용이 발생하는 이유와 올바른 착용법.',tags:['보호구','안전수칙'],icon:'⛑️',views:98,status:'공개',content:'오늘은 현장에서 올바른 보호구 착용의 중요성에 대해 이야기해보려 합니다.\n\n■ 왜 보호구를 써도 사고는 발생할까?\n보호구를 착용했는데도 사고가 발생하는 이유는 "형식적 착용" 때문입니다.\n안전모를 뒤로 젖혀 쓰거나, 안전벨트를 느슨하게 착용하는 경우가 이에 해당합니다.\n\n■ 올바른 보호구 착용 방법\n1. 착용 전 상태 확인: 파손·노후화 여부 점검\n2. 올바른 착용법 숙지: 제조사 매뉴얼 확인\n3. 작업 중 지속 착용: 잠깐이라는 생각이 가장 위험\n4. 정기적 교체: 수명이 다한 보호구는 즉시 교체\n\n현장에서의 작은 습관 하나가 큰 사고를 막을 수도, 발생시킬 수도 있습니다.'},
+    {id:'p3',title:'하루 10분이 생명을 지킵니다 — TBM(Tool Box Meeting)',cat:'TBM·안전문화',date:'2026.02.18',ex:'사고는 특별한 날이 아니라 익숙한 날에 발생합니다. TBM이 반드시 필요한 이유.',tags:['TBM','안전문화'],icon:'📋',views:215,status:'공개',content:'"오늘 작업은 어제랑 똑같으니까 바로 시작합시다."\n현장에서 가장 위험한 말 중 하나입니다.\n\n■ TBM이란?\nTBM(Tool Box Meeting)은 작업 시작 전 10분간 진행하는 안전 회의입니다.\n\n■ 효과적인 TBM 진행 방법\n1. 오늘 작업 내용 공유\n2. 예상 위험 요소 도출\n3. 안전 수칙 확인\n4. 이상 징후 보고 독려\n5. 10분 이내로 간결하게\n\n하루 10분의 작은 행동이 생명을 지킵니다.'},
+    {id:'p4',title:'4월 28일, 산업재해 근로자의 날',cat:'법령·공지',date:'2026.04.28',ex:'산업재해로 희생된 노동자들을 추모하고 안전을 다시 생각하는 날.',tags:['노동자의날','산업재해'],icon:'🕯️',views:76,status:'공개',content:'오늘은 4월 28일, 산업재해 근로자의 날입니다.\n1993년 태국 케이더 장난감 공장 화재 참사를 계기로 국제사회가 지정한 날입니다.\n\n■ 산업재해는 우연이 아닙니다\n구조적인 문제에서 반복적으로 발생하는 경우가 많습니다.'},
+    {id:'p5',title:'끼임사고 예방을 위한 필수 안전수칙',cat:'사고 예방',date:'2026.04.22',ex:'끼임사고는 충분히 예방할 수 있습니다. 2인 1조와 안전 소통이 핵심.',tags:['끼임사고','안전수칙'],icon:'⚠️',views:134,status:'공개',content:'■ 끼임사고 예방의 핵심\n2인 1조 작업은 선택이 아닌 필수입니다.\n혼자 작업하다 발생하는 끼임사고는 도움을 요청할 수도 없어 더 큰 사고로 이어집니다.\n\n끼임사고는 충분히 예방할 수 있는 사고입니다.'},
+    {id:'p6',title:'인지행동치료(CBT)로 돕는 사고 후 심리 위축 작업자',cat:'심리·행동 안전',date:'2026.01.09',ex:'"몸은 회복됐는데, 마음이 먼저 멈췄습니다" — 사고 후 심리 관리의 중요성.',tags:['CBT','안전심리'],icon:'🩺',views:89,status:'공개',content:'"몸은 괜찮아졌는데, 현장에 서는 게 아직 어렵습니다"\n\n사고 이후의 불안은 관리해야 할 신호입니다.\nCBT는 생각의 패턴을 바꾸어 행동의 변화를 이끌어내는 접근법입니다.\n관리감독자가 그 신호를 읽고 도와줄 수 있을 때, 현장은 더 안전해집니다.'}
+  ];
+  S.courses=[
+    {id:'c1',name:'관리감독자 정기 안전보건교육 (집체)',type:'법정의무',date:'2026-06-15',cap:30,enrolled:18,status:'신청가능'},
+    {id:'c2',name:'관리감독자 정기 안전보건교육 (비대면)',type:'법정의무',date:'2026-06-20',cap:50,enrolled:32,status:'신청가능'},
+    {id:'c3',name:'위험성평가 체험학습 과정',type:'특별교육',date:'2026-07-05',cap:20,enrolled:20,status:'마감'},
+    {id:'c4',name:'근로자 안전보건교육 (정기)',type:'법정의무',date:'2026-07-12',cap:40,enrolled:11,status:'신청가능'}
+  ];
+  S.enrollments=[
+    {id:'e1',name:'김철수',company:'부산건설(주)',course:'관리감독자 정기 안전보건교육 (집체)',phone:'010-1234-5678',date:'2026.05.02',status:'승인완료',done:true},
+    {id:'e2',name:'이영희',company:'금곡산업',course:'위험성평가 체험학습 과정',phone:'010-9876-5432',date:'2026.05.03',status:'대기중',done:false},
+    {id:'e3',name:'박민준',company:'(주)안전물류',course:'근로자 안전보건교육 (정기)',phone:'010-5555-6666',date:'2026.05.04',status:'승인완료',done:false},
+    {id:'e4',name:'최수진',company:'현장기계',course:'관리감독자 정기 안전보건교육 (비대면)',phone:'010-7777-8888',date:'2026.05.05',status:'대기중',done:false}
+  ];
+  S.users=[
+    {id:'u1',name:'김철수',email:'kim@busan.com',phone:'010-1234-5678',joined:'2026.04.10',cnt:2,role:'MEMBER'},
+    {id:'u2',name:'이영희',email:'lee@safety.com',phone:'010-9876-5432',joined:'2026.04.22',cnt:1,role:'MEMBER'},
+    {id:'u3',name:'관리자',email:'admin@kiei.or.kr',phone:'051-327-5604',joined:'2026.01.01',cnt:0,role:'ADMIN'}
+  ];
+  S.resources=[
+    {id:'r1',name:'2026년 관리감독자 교육 신청서',cat:'교육 서식',file:'신청서.hwp',size:'245KB',dl:38,date:'2026.03.09'},
+    {id:'r2',name:'근로자 유형별 법정 안전보건교육 기준',cat:'법령 자료',file:'법정교육기준.pdf',size:'1.2MB',dl:64,date:'2025.10.26'},
+    {id:'r3',name:'인권 존중 문화 법정 교육 기준',cat:'법령 자료',file:'인권교육기준.pdf',size:'890KB',dl:29,date:'2025.10.26'},
+    {id:'r4',name:'봄철 작업장 안전점검 가이드',cat:'안전 가이드',file:'봄철안전점검.pdf',size:'756KB',dl:43,date:'2026.03.04'}
+  ];
+  S.notices=[
+    {id:'n1',title:'2026년도 관리감독자 정기 안전보건교육 실시 안내',date:'2026.03.09',views:187,pin:true},
+    {id:'n2',title:'★비대면 관리감독자 교육 참가신청 안내★',date:'2026.01.29',views:143,pin:true},
+    {id:'n3',title:'2026년 안전문화 확산 전문 강사 모집',date:'2025.11.26',views:98,pin:false},
+    {id:'n4',title:'11월 이벤트 — 안전퀴즈 이벤트!',date:'2025.11.25',views:76,pin:false}
+  ];
+  S.certs=[
+    {id:'ct1',name:'김철수',course:'관리감독자 정기 안전보건교육',date:'2026.05.02',no:'KIEI-2026-041',issued:true},
+    {id:'ct2',name:'박민준',course:'근로자 안전보건교육 (정기)',date:'2026.05.04',no:'KIEI-2026-042',issued:false}
+  ];
+}
+
+// ROUTING
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  const el=document.getElementById('page-'+p);
+  if(!el)return;
+  el.classList.add('active');
+  window.scrollTo(0,0);
+  closeMM();
+  if(['mypage'].includes(p)&&!S.user){showPage('login');return;}
+  if(['admin'].includes(p)&&!S.isAdmin){showPage('admin-login');return;}
+  const r={blog:renderBlog,notice:renderNotice,resources:renderRes,mypage:renderMypage,admin:renderAdmin,courses:()=>renderCal()};
+  if(r[p])r[p]();
+}
+function nav2(p){closeMM();showPage(p);}
+
+// MOBILE
+function toggleM(){document.getElementById('mmenu').classList.toggle('open');}
+function closeMM(){document.getElementById('mmenu').classList.remove('open');}
+
+// TOAST
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+
+// MODAL
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.addEventListener('click',e=>{if(e.target.classList.contains('mo'))e.target.classList.remove('open');});
+
+// TABS
+function switchTab(btn,pid){
+  btn.parentElement.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById(pid);
+  if(el)el.classList.add('active');
+}
+
+// AUTH
+function doLogin(){
+  const email=document.getElementById('l-email').value.trim();
+  const pw=document.getElementById('l-pw').value;
+  if(!email||!pw){showToast('이메일과 비밀번호를 입력해주세요');return;}
+  const saved=JSON.parse(localStorage.getItem('kiei_users')||'[]');
+  const found=saved.find(u=>u.email===email&&u.pw===pw);
+  if(found){
+    S.user=found;
+    const a=document.getElementById('tauth');
+    a.textContent=found.name+'님';a.onclick=()=>showPage('mypage');
+    showToast('환영합니다, '+found.name+'님!');showPage('home');
+  }else showToast('이메일 또는 비밀번호가 올바르지 않습니다');
+}
+function doRegister(){
+  const name=document.getElementById('r-name').value.trim();
+  const phone=document.getElementById('r-phone').value.trim();
+  const email=document.getElementById('r-email').value.trim();
+  const pw=document.getElementById('r-pw').value;
+  const pw2=document.getElementById('r-pw2').value;
+  if(!name||!phone||!email||!pw){showToast('필수 항목을 모두 입력해주세요');return;}
+  if(pw!==pw2){showToast('비밀번호가 일치하지 않습니다');return;}
+  if(pw.length<8){showToast('비밀번호는 8자 이상이어야 합니다');return;}
+  const saved=JSON.parse(localStorage.getItem('kiei_users')||'[]');
+  if(saved.find(u=>u.email===email)){showToast('이미 사용중인 이메일입니다');return;}
+  const nu={id:'u'+Date.now(),name,phone,email,pw,company:document.getElementById('r-co').value,role:'MEMBER',joined:new Date().toLocaleDateString('ko-KR')};
+  saved.push(nu);localStorage.setItem('kiei_users',JSON.stringify(saved));
+  S.user=nu;
+  const a=document.getElementById('tauth');
+  a.textContent=name+'님';a.onclick=()=>showPage('mypage');
+  showToast('회원가입 완료! 환영합니다, '+name+'님');showPage('home');
+}
+function doLogout(){S.user=null;const a=document.getElementById('tauth');a.textContent='로그인';a.onclick=()=>showPage('login');showToast('로그아웃 되었습니다');showPage('home');}
+function doAdminLogin(){
+  const id=document.getElementById('adm-id').value;
+  const pw=document.getElementById('adm-pw').value;
+  if(id==='admin'&&pw==='kiei2026'){S.isAdmin=true;showToast('관리자로 로그인되었습니다');showPage('admin');}
+  else showToast('관리자 정보가 올바르지 않습니다');
+}
+function doAdminLogout(){S.isAdmin=false;showToast('로그아웃 되었습니다');showPage('home');}
+
+// BLOG
+function catClr(c){return {'심리·행동 안전':'#EAF5EC','사고 예방':'#F0F7F1','TBM·안전문화':'#F5F0F7','법령·공지':'#FFF7ED','계절별 안전':'#EFF6FF'}[c]||'#EAF5EC';}
+function renderBlog(posts){
+  const grid=document.getElementById('blog-grid');
+  const data=posts||S.posts;
+  grid.innerHTML=data.map(p=>`
+    <div class="pcard" onclick="showPost('${p.id}')">
+      <div class="pt" style="background:${catClr(p.cat)}">${p.icon}<span class="ptcat">${p.cat}</span></div>
+      <div class="pc"><div class="pd">${p.date}</div><div class="ptitle">${p.title}</div>
+      <div class="pex">${p.ex}</div>
+      <div class="ptags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>
+    </div>`).join('');
+}
+function filterBlog(kw){const k=kw.toLowerCase();renderBlog(S.posts.filter(p=>p.title.toLowerCase().includes(k)||p.tags.some(t=>t.includes(k))||p.cat.includes(k)));}
+function filterCat(c){renderBlog(c==='전체'?S.posts:S.posts.filter(p=>p.cat===c));}
+function showPost(id){
+  const p=S.posts.find(x=>x.id===id);if(!p)return;p.views++;
+  document.getElementById('blog-detail-content').innerHTML=`
+    <div class="pd" style="margin-bottom:8px">${p.date} · ${p.cat}</div>
+    <h1 style="font-size:22px;font-weight:900;line-height:1.4;margin-bottom:16px">${p.title}</h1>
+    <div class="ptags" style="margin-bottom:24px">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <hr style="border:none;border-top:2px solid var(--g2);margin-bottom:28px">
+    <div style="font-size:15px;color:var(--g7);line-height:1.9;white-space:pre-line">${p.content}</div>
+    <hr style="border:none;border-top:1px solid var(--g2);margin:32px 0 20px">
+    <div style="background:var(--gl);border-radius:var(--r);padding:20px;text-align:center">
+      <p style="font-size:13px;color:var(--g5);margin-bottom:12px">법정교육(산업안전보건교육, 개인정보보호교육, 직장내성희롱예방교육) 집체교육/현장교육/온라인교육/비대면교육/맞춤형교육/안전행동컨설팅</p>
+      <strong style="color:var(--gd);font-size:14px">안전한 현장, 행복한 세상 — 한국산업교육연구소 안전교육센터</strong><br>
+      <span style="font-size:13px;color:var(--g5)">전화: 051-327-5604 | kiei@kiei.or.kr</span>
+    </div>`;
+  showPage('blog-detail');
+}
+
+// HOME POSTS
+function renderHomePosts(){
+  const el=document.getElementById('home-posts');if(!el)return;
+  el.innerHTML=S.posts.slice(0,3).map(p=>`
+    <div class="pcard" onclick="showPost('${p.id}')">
+      <div class="pt" style="background:${catClr(p.cat)}">${p.icon}<span class="ptcat">${p.cat}</span></div>
+      <div class="pc"><div class="pd">${p.date}</div><div class="ptitle">${p.title}</div>
+      <div class="pex">${p.ex}</div>
+      <div class="ptags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>
+    </div>`).join('');
+}
+
+// NOTICE
+function renderNotice(){
+  document.getElementById('notice-table').innerHTML=S.notices.map((n,i)=>`
+    <tr><td style="color:var(--g4)">${S.notices.length-i}</td>
+    <td><span style="display:flex;align-items:center;gap:8px">${n.pin?'<span class="badge bn" style="margin:0">공지</span>':''}<span style="font-weight:${n.pin?700:400}">${n.title}</span></span></td>
+    <td>${n.date}</td><td>${n.views}</td></tr>`).join('');
+}
+
+// RESOURCES
+function renderRes(){
+  document.getElementById('res-table').innerHTML=S.resources.map((r,i)=>`
+    <tr><td style="color:var(--g4)">${i+1}</td>
+    <td style="font-weight:500">${r.name}</td>
+    <td><span class="badge bcat" style="margin:0">${r.cat}</span></td>
+    <td style="font-size:12px;color:var(--g4)">${r.file} (${r.size})</td>
+    <td class="tc">${r.dl}회</td><td>${r.date}</td></tr>`).join('');
+}
+
+// APPLY
+function submitApply(){
+  const course=document.getElementById('a-course').value;
+  const name=document.getElementById('a-name').value.trim();
+  const company=document.getElementById('a-co').value.trim();
+  const phone=document.getElementById('a-phone').value.trim();
+  const email=document.getElementById('a-email').value.trim();
+  if(!course||!name||!company||!phone||!email){showToast('필수 항목을 모두 입력해주세요');return;}
+  S.enrollments.unshift({id:'e'+Date.now(),name,company,course,phone,email,date:new Date().toLocaleDateString('ko-KR'),status:'대기중',done:false});
+  showToast('✅ 교육 신청 완료! 이메일로 확인서가 발송됩니다');
+  ['a-course','a-name','a-co','a-pos','a-cnt','a-phone','a-email','a-date','a-memo'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  showPage('home');
+}
+
+// CONTACT
+function submitContact(){
+  const name=document.getElementById('c-name').value.trim();
+  const phone=document.getElementById('c-phone').value.trim();
+  const content=document.getElementById('c-content').value.trim();
+  if(!name||!phone||!content){showToast('이름, 연락처, 문의 내용은 필수입니다');return;}
+  showToast('✅ 문의가 접수되었습니다. 빠르게 연락드리겠습니다!');
+  ['c-name','c-co','c-phone','c-email','c-content'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+}
+function submitForm(t){showToast('✅ '+t+' 완료! 담당자가 확인 후 연락드리겠습니다');}
+
+// MYPAGE
+function renderMypage(){
+  if(!S.user)return;
+  document.getElementById('my-name').textContent=S.user.name;
+  document.getElementById('my-enroll-table').innerHTML=S.enrollments.slice(0,3).map(e=>`
+    <tr><td style="font-weight:500">${e.course}</td><td>${e.date}</td>
+    <td><span class="sb ${e.status==='승인완료'?'spa':'spp'}">${e.status}</span></td>
+    <td>${e.done?`<button class="bp bsm" onclick="viewCert('${e.name}','${e.course}')">수료증 보기</button>`:'<span style="font-size:12px;color:var(--g4)">미수료</span>'}</td></tr>`).join('');
+  const certs=S.certs.filter(c=>c.issued);
+  document.getElementById('my-cert-list').innerHTML=certs.length?certs.map(c=>`
+    <div class="ac"><div style="display:flex;justify-content:space-between;align-items:center">
+      <div><strong>${c.course}</strong><p style="font-size:12px;color:var(--g4);margin-top:4px">수료일: ${c.date} · 번호: ${c.no}</p></div>
+      <button class="bp bsm" onclick="viewCert('${c.name}','${c.course}','${c.date}','${c.no}')">📄 보기</button>
+    </div></div>`).join(''):'<div class="alert ainfo">발급 가능한 수료증이 없습니다.</div>';
+  if(S.user){
+    document.getElementById('pf-name').value=S.user.name||'';
+    document.getElementById('pf-phone').value=S.user.phone||'';
+    document.getElementById('pf-email').value=S.user.email||'';
+    document.getElementById('pf-co').value=S.user.company||'';
+  }
+}
+function switchMy(pid,el){
+  ['my-enroll','my-cert','my-profile'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  document.getElementById(pid).style.display='block';
+  document.querySelectorAll('.mnav a').forEach(a=>a.classList.remove('active'));
+  if(el)el.classList.add('active');
+}
+function saveProfile(){if(S.user){S.user.name=document.getElementById('pf-name').value;S.user.phone=document.getElementById('pf-phone').value;}showToast('프로필이 저장되었습니다');}
+function viewCert(name,course,date,no){
+  document.getElementById('cert-name').textContent=name||(S.user?.name||'홍길동');
+  document.getElementById('cert-course').textContent=course;
+  document.getElementById('cert-date').textContent=date||new Date().toLocaleDateString('ko-KR');
+  document.getElementById('cert-no').textContent=no||'KIEI-2026-'+String(Math.floor(Math.random()*900)+100);
+  openM('modal-cert');
+}
+function dlCert(){showToast('📥 PDF 다운로드 (Supabase 연동 후 실제 파일 생성)');closeM('modal-cert');}
+
+// ADMIN
+function renderAdmin(){renderAdmDash();renderAdmContent();renderAdmCourses();renderAdmEnroll();renderAdmUsers();renderAdmRes();renderAdmNotice();renderAdmCert();renderVisitChart();}
+function switchAdm(pid,el){
+  document.querySelectorAll('.adm-panel').forEach(p=>p.style.display='none');
+  document.getElementById(pid).style.display='block';
+  document.querySelectorAll('.aside a').forEach(a=>a.classList.remove('active'));
+  if(el)el.classList.add('active');
+}
+function renderAdmDash(){
+  const el=document.getElementById('adm-recent');if(!el)return;
+  el.innerHTML=S.enrollments.slice(0,4).map(e=>`
+    <tr><td style="font-weight:500">${e.name}</td>
+    <td style="font-size:12px">${e.course.substring(0,20)}...</td>
+    <td style="font-size:12px">${e.date}</td>
+    <td><span class="sb ${e.status==='승인완료'?'spa':'spp'}">${e.status}</span></td>
+    <td>${e.status==='대기중'?`<button class="bp bsm" onclick="approveE('${e.id}')">승인</button>`:'-'}</td></tr>`).join('');
+}
+function renderVisitChart(){
+  const el=document.getElementById('visit-chart');if(!el)return;
+  const days=['05/01','05/02','05/03','05/04','05/05','05/06','오늘'];
+  const vals=[28,34,41,29,52,38,47];const max=Math.max(...vals);
+  el.innerHTML=days.map((d,i)=>`
+    <div class="cbi"><span class="cbl">${d}</span>
+    <div class="cbt"><div class="cbf" style="width:${Math.round(vals[i]/max*100)}%"><span>${vals[i]}</span></div></div></div>`).join('');
+}
+function renderAdmContent(){
+  const el=document.getElementById('adm-content-table');if(!el)return;
+  el.innerHTML=S.posts.map(p=>`
+    <tr><td style="font-weight:500;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.title}</td>
+    <td><span class="badge bcat" style="margin:0">${p.cat}</span></td>
+    <td><span class="sb spa">${p.status}</span></td>
+    <td class="tc">${p.views}</td><td style="font-size:12px">${p.date}</td>
+    <td><button class="bd bsm" onclick="delPost('${p.id}')">삭제</button></td></tr>`).join('');
+}
+function renderAdmCourses(){
+  const el=document.getElementById('adm-courses-table');if(!el)return;
+  el.innerHTML=S.courses.map(c=>`
+    <tr><td style="font-weight:500">${c.name}</td>
+    <td><span class="badge bl" style="margin:0">${c.type}</span></td>
+    <td style="font-size:12px">${c.date}</td><td class="tc">${c.cap}명</td><td class="tc">${c.enrolled}명</td>
+    <td><span class="sb ${c.status==='신청가능'?'spa':'spr'}">${c.status}</span></td>
+    <td><button class="bs bsm">수정</button></td></tr>`).join('');
+}
+function renderAdmEnroll(){
+  const el=document.getElementById('adm-enroll-table');if(!el)return;
+  el.innerHTML=S.enrollments.map(e=>`
+    <tr><td style="font-weight:500">${e.name}</td><td style="font-size:12px">${e.company}</td>
+    <td>${e.course}</td><td style="font-size:12px">${e.phone}</td><td style="font-size:12px">${e.date}</td>
+    <td><span class="sb ${e.status==='승인완료'?'spa':e.status==='대기중'?'spp':'spr'}">${e.status}</span></td>
+    <td>${e.status==='대기중'?`<button class="bp bsm" onclick="approveE('${e.id}')">승인</button>`:''}</td></tr>`).join('');
+}
+function renderAdmUsers(){
+  const saved=JSON.parse(localStorage.getItem('kiei_users')||'[]');
+  const all=[...S.users,...saved.filter(u=>!S.users.find(x=>x.email===u.email))];
+  const el=document.getElementById('adm-users-table');if(!el)return;
+  el.innerHTML=all.map(u=>`
+    <tr><td style="font-weight:500">${u.name}</td><td style="font-size:12px">${u.email}</td>
+    <td style="font-size:12px">${u.phone||'-'}</td><td style="font-size:12px">${u.joined||'-'}</td>
+    <td class="tc">${u.cnt||0}</td>
+    <td><span class="sb ${u.role==='ADMIN'?'spc':'spa'}">${u.role}</span></td>
+    <td><button class="bs bsm">관리</button></td></tr>`).join('');
+}
+function renderAdmRes(){
+  const el=document.getElementById('adm-res-table');if(!el)return;
+  el.innerHTML=S.resources.map(r=>`
+    <tr><td style="font-weight:500">${r.name}</td>
+    <td><span class="badge bcat" style="margin:0">${r.cat}</span></td>
+    <td style="font-size:12px;color:var(--g4)">${r.file} (${r.size})</td>
+    <td class="tc">${r.dl}회</td><td style="font-size:12px">${r.date}</td>
+    <td><button class="bd bsm" onclick="delRes('${r.id}')">삭제</button></td></tr>`).join('');
+}
+function renderAdmNotice(){
+  const el=document.getElementById('adm-notice-table');if(!el)return;
+  el.innerHTML=S.notices.map(n=>`
+    <tr><td style="font-weight:${n.pin?700:400}">${n.title}</td>
+    <td class="tc">${n.pin?'📌':'-'}</td><td style="font-size:12px">${n.date}</td>
+    <td><button class="bd bsm" onclick="delNotice('${n.id}')">삭제</button></td></tr>`).join('');
+}
+function renderAdmCert(){
+  const el=document.getElementById('adm-cert-table');if(!el)return;
+  el.innerHTML=S.certs.map(c=>`
+    <tr><td style="font-weight:500">${c.name}</td><td>${c.course}</td><td>${c.date}</td>
+    <td style="font-size:12px;color:var(--g4)">${c.no}</td>
+    <td>${c.issued?`<button class="bp bsm" onclick="viewCert('${c.name}','${c.course}','${c.date}','${c.no}')">📄 보기</button>`:`<button class="bs bsm" onclick="issueCert('${c.id}')">발급</button>`}</td></tr>`).join('');
+}
+function approveE(id){const e=S.enrollments.find(x=>x.id===id);if(e){e.status='승인완료';renderAdmin();showToast('✅ 승인 완료. 이메일이 발송됩니다');}}
+function issueCert(id){const c=S.certs.find(x=>x.id===id);if(c){c.issued=true;renderAdmCert();showToast('수료증이 발급되었습니다');}}
+function delPost(id){if(!confirm('삭제하시겠습니까?'))return;S.posts=S.posts.filter(p=>p.id!==id);renderAdmContent();showToast('삭제되었습니다');}
+function delRes(id){if(!confirm('삭제하시겠습니까?'))return;S.resources=S.resources.filter(r=>r.id!==id);renderAdmRes();showToast('삭제되었습니다');}
+function delNotice(id){if(!confirm('삭제하시겠습니까?'))return;S.notices=S.notices.filter(n=>n.id!==id);renderAdmNotice();showToast('삭제되었습니다');}
+function savePost(){
+  const title=document.getElementById('post-title').value.trim();
+  const content=document.getElementById('post-content').value.trim();
+  if(!title||!content){showToast('제목과 내용을 입력해주세요');return;}
+  S.posts.unshift({id:'p'+Date.now(),title,content,cat:document.getElementById('post-cat').value,status:document.getElementById('post-status').value,date:new Date().toLocaleDateString('ko-KR'),tags:document.getElementById('post-tags').value.split(',').map(t=>t.trim()).filter(Boolean),ex:content.substring(0,60)+'...',icon:'📄',views:0});
+  closeM('modal-post');renderAdmContent();showToast('글이 등록되었습니다');
+}
+function applyColor(v){document.getElementById('c-hex').textContent=v;document.documentElement.style.setProperty('--gm',v);document.documentElement.style.setProperty('--gd',v);}
+function saveSettings(){applyColor(document.getElementById('c-primary').value);showToast('✅ 설정이 저장되었습니다');}
+
+// CALENDAR
+let calY=2026,calM=4;
+function renderCal(){
+  const el=document.getElementById('cal-wrap');if(!el)return;
+  const evs={'2026-5-15':[{n:'관리감독자 교육 (집체)',t:'open'}],'2026-5-20':[{n:'관리감독자 교육 (비대면)',t:'open'}],'2026-6-5':[{n:'위험성평가 체험학습',t:'full'}],'2026-6-12':[{n:'근로자 안전보건교육',t:'open'}],'2026-6-25':[{n:'강사 파견 교육',t:'soon'}]};
+  const y=calY,m=calM;const first=new Date(y,m,1).getDay();const days=new Date(y,m+1,0).getDate();
+  const months=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  el.innerHTML=`
+    <div class="calh"><button class="calnb" onclick="moveCal(-1)">◀</button><h3>${y}년 ${months[m]}</h3><button class="calnb" onclick="moveCal(1)">▶</button></div>
+    <div style="margin-bottom:12px;display:flex;gap:12px;font-size:11px"><span>🟢 신청가능</span><span>🔴 마감</span><span>🟡 마감임박</span></div>
+    <div class="calgrid">
+      ${['일','월','화','수','목','금','토'].map(d=>`<div class="calday-name">${d}</div>`).join('')}
+      ${Array(first).fill().map(()=>`<div class="calday other"></div>`).join('')}
+      ${Array(days).fill().map((_,i)=>{
+        const d=i+1;const today=new Date();
+        const isT=y===today.getFullYear()&&m===today.getMonth()&&d===today.getDate();
+        const key=`${y}-${m+1}-${d}`;const ev=evs[key]||[];
+        return `<div class="calday${isT?' today':''}"><div class="dn">${d}</div>${ev.map(e=>`<div class="calev${e.t==='full'?' full':e.t==='soon'?' soon':''}" onclick="showToast('${e.n}')">${e.n.substring(0,8)}</div>`).join('')}</div>`;
+      }).join('')}
+    </div>`;
+}
+function moveCal(d){calM+=d;if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;}renderCal();}
+
+// CALC
+function calcEdu(){
+  const role=document.getElementById('calc-role').value;
+  if(!role){document.getElementById('calc-result').style.display='none';document.getElementById('calc-empty').style.display='flex';return;}
+  const R={sup:{h:'연간 16시간',p:'500만원 이하 과태료',c:['관리감독자 정기 안전보건교육 (연 16시간)','위험성평가 교육 (권장)','안전보건관리 역량 강화 (권장)']},wk:{h:'분기 6시간 이상',p:'100만원 이하 과태료',c:['근로자 정기 안전보건교육 (분기 6시간)','채용 시 안전보건교육 (8시간)','작업 변경 시 교육 (2시간)']},nw:{h:'8시간 이상',p:'100만원 이하 과태료',c:['신규 채용자 안전보건교육 (8시간)','기계·기구 사용 교육','비상시 대피 교육']},own:{h:'법정 기준 준수',p:'중대재해처벌법 적용',c:['안전보건관리체계 구축 교육','중대재해처벌법 대응 교육','위험성평가 이행 교육']}};
+  const r=R[role];
+  document.getElementById('calc-result').style.display='block';document.getElementById('calc-empty').style.display='none';
+  document.getElementById('calc-body').innerHTML=`
+    <div class="ci">✅</div><h3 style="color:var(--gd);margin-bottom:16px">필요한 법정 교육 목록</h3>
+    <div style="background:var(--gl);border-radius:var(--rs);padding:14px;margin-bottom:16px;font-size:13px">
+      <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,0,0,0.06)"><span>의무 교육시간</span><strong>${r.h}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:var(--ar)">미이수 불이익</span><strong style="color:var(--ar)">${r.p}</strong></div>
+    </div>
+    ${r.c.map(c=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13.5px"><span style="color:var(--gm)">✓</span>${c}</div>`).join('')}
+    <button class="bp" style="width:100%;margin-top:16px" onclick="showPage('apply')">바로 신청하기</button>`;
+}
+
+// FAQ
+function renderFAQ(){
+  const faqs=[
+    {q:'관리감독자 교육을 받지 않으면 어떤 불이익이 있나요?',a:'산업안전보건법에 따라 연간 16시간 이상 이수하지 않으면 사업주에게 500만원 이하의 과태료가 부과될 수 있습니다.'},
+    {q:'비대면 교육은 어떻게 진행되나요?',a:'PC 또는 모바일로 시간과 장소에 구애받지 않고 수강할 수 있습니다. 수강 완료 후 수료증이 발급됩니다.'},
+    {q:'교육 신청 후 일정 변경이 가능한가요?',a:'교육 시작 3일 전까지 전화(051-327-5604) 또는 이메일(kiei@kiei.or.kr)로 연락 주시면 변경 가능합니다.'},
+    {q:'단체 교육 할인이 있나요?',a:'10인 이상 단체 신청 시 별도 협의를 통해 할인 혜택이 제공될 수 있습니다. 전화로 문의해주세요.'},
+    {q:'수료증은 어떻게 발급받나요?',a:'교육 이수 완료 후 관리자가 수료 처리하면 마이페이지에서 PDF 수료증을 다운로드하실 수 있습니다.'},
+    {q:'현장방문 교육도 가능한가요?',a:'네, 전문 강사가 직접 사업장을 방문하는 현장방문 교육을 운영합니다. 업종·인원·일정에 맞게 맞춤 구성이 가능합니다.'}
+  ];
+  const el=document.getElementById('faq-list');if(!el)return;
+  el.innerHTML=faqs.map(f=>`
+    <div class="fqi">
+      <div class="fqq" onclick="toggleFAQ(this)"><span>Q. ${f.q}</span><span class="fqarr">▼</span></div>
+      <div class="fqa">${f.a}</div>
+    </div>`).join('');
+}
+function toggleFAQ(el){el.classList.toggle('open');el.nextElementSibling.classList.toggle('open');}
+
+// INIT
+document.addEventListener('DOMContentLoaded',()=>{
+  seed();renderFAQ();renderCal();renderBlog();renderHomePosts();
+  document.getElementById('tauth').onclick=()=>showPage('login');
+});
+</script>
+</body>
+</html>
