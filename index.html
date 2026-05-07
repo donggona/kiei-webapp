@@ -323,13 +323,11 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
 }
 </style>
 
-<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=a393d72cd5159991206d14f920c9cd6a&libraries=services"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPA_URL = 'https://dwycuwrbhbjvabgqcefl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eWN1d3JiaGJqdmFiZ3FjZWZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMjY1MjMsImV4cCI6MjA5MzcwMjUyM30.3jxje-NCqOTjvor33LWmEAk-5xaliLkYZgpNbmWwBQg';
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
-const KAKAO_KEY = 'a393d72cd5159991206d14f920c9cd6a';
 </script>
 </head>
 <body>
@@ -507,8 +505,12 @@ const KAKAO_KEY = 'a393d72cd5159991206d14f920c9cd6a';
       <div class="crow"><div class="cbox">🌐</div><div><strong>블로그</strong><p>blog.naver.com/1990kiei</p></div></div>
     </div>
     <div>
-      <div id="kakao-map" style="width:100%;height:280px;border-radius:var(--r);overflow:hidden;border:1.5px solid var(--g2)"></div>
-      <a href="https://map.kakao.com/link/to/한국산업교육연구소안전교육센터,35.2310,129.0174" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-size:12px;color:var(--gm);font-weight:600;text-decoration:none">🗺️ 카카오맵에서 길찾기</a>
+      <div class="mapbox" onclick="window.open('https://map.naver.com/p/entry/place/16501631','_blank')">
+        <span style="font-size:44px">🗺️</span><p>네이버 지도로 보기</p>
+        <span>부산 북구 금곡대로 458 금곡월드프라자 3층</span>
+        <button class="bp bsm" style="margin-top:8px">지도 열기</button>
+      </div>
+      <p style="font-size:11px;color:var(--g4);margin-top:8px;text-align:center">※ 네이버 클라우드 API 키 적용 시 지도가 직접 표시됩니다</p>
     </div>
   </div></div></div>
 </div>
@@ -703,8 +705,11 @@ const KAKAO_KEY = 'a393d72cd5159991206d14f920c9cd6a';
         <div class="crow"><div class="cbox">🕐</div><div><strong>운영시간</strong><p>평일 09:00~18:00 / 주말·공휴일 휴무</p></div></div>
       </div>
       <div>
-        <div id="kakao-map2" style="width:100%;height:280px;border-radius:var(--r);overflow:hidden;border:1.5px solid var(--g2)"></div>
-        <a href="https://map.kakao.com/link/to/한국산업교육연구소안전교육센터,35.2310,129.0174" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-size:12px;color:var(--gm);font-weight:600;text-decoration:none">🗺️ 카카오맵에서 길찾기</a>
+        <div class="mapbox" onclick="window.open('https://map.naver.com/p/entry/place/16501631','_blank')">
+          <span style="font-size:44px">🗺️</span><p>네이버 지도로 보기</p>
+          <span>클릭하면 네이버 지도가 열립니다</span>
+          <button class="bp bsm" style="margin-top:8px">지도 열기</button>
+        </div>
       </div>
     </div>
     <div class="ac">
@@ -1451,88 +1456,22 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <script>
-// ══════════════════════════════════════════
-// 카카오맵 초기화
-// ══════════════════════════════════════════
-const KIEI_LAT = 35.2310;
-const KIEI_LNG = 129.0174;
-const KIEI_ADDR = '부산광역시 북구 금곡대로 458 금곡월드프라자 3층';
-
-function initKakaoMap(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  try {
-    const options = {
-      center: new kakao.maps.LatLng(KIEI_LAT, KIEI_LNG),
-      level: 3
-    };
-    const map = new kakao.maps.Map(container, options);
-
-    // 마커 생성
-    const markerPos = new kakao.maps.LatLng(KIEI_LAT, KIEI_LNG);
-    const marker = new kakao.maps.Marker({ position: markerPos });
-    marker.setMap(map);
-
-    // 인포윈도우 (말풍선)
-    const infowindow = new kakao.maps.InfoWindow({
-      content: `<div style="padding:8px 12px;font-size:13px;font-weight:700;color:#1A5E29;white-space:nowrap">
-        한국산업교육연구소 안전교육센터<br>
-        <span style="font-size:11px;color:#6B7B6C;font-weight:400">${KIEI_ADDR}</span>
-      </div>`
-    });
-    infowindow.open(map, marker);
-
-    // 지도 컨트롤
-    const zoomControl = new kakao.maps.ZoomControl();
-    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-
-    const mapTypeControl = new kakao.maps.MapTypeControl();
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-
-  } catch(e) {
-    console.log('카카오맵 초기화 오류:', e);
-    if (container) {
-      container.innerHTML = `
-        <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#EAF5EC;gap:8px">
-          <span style="font-size:36px">🗺️</span>
-          <p style="font-size:13px;color:#2A7D3B;font-weight:600">지도 로딩 중...</p>
-        </div>`;
-    }
-  }
-}
-
-// 페이지 이동 시 지도 초기화
-const _origShowPage = showPage;
-function showPage(p) {
-  _origShowPage(p);
-  if (p === 'home') {
-    setTimeout(() => initKakaoMap('kakao-map'), 100);
-  }
-  if (p === 'contact') {
-    setTimeout(() => initKakaoMap('kakao-map2'), 100);
-  }
-}
-
-// ══════════════════════════════════════════
-// SUPABASE 실제 DB 연동
-// ══════════════════════════════════════════
-
 async function doRegister() {
-  const name = document.getElementById('r-name').value.trim();
-  const phone = document.getElementById('r-phone').value.trim();
-  const email = document.getElementById('r-email').value.trim();
-  const pw = document.getElementById('r-pw').value;
-  const pw2 = document.getElementById('r-pw2').value;
-  const company = document.getElementById('r-co').value.trim();
-  if (!name||!phone||!email||!pw){showToast('필수 항목을 모두 입력해주세요');return;}
-  if (pw!==pw2){showToast('비밀번호가 일치하지 않습니다');return;}
-  if (pw.length<8){showToast('비밀번호는 8자 이상이어야 합니다');return;}
+  const name=document.getElementById('r-name').value.trim();
+  const phone=document.getElementById('r-phone').value.trim();
+  const email=document.getElementById('r-email').value.trim();
+  const pw=document.getElementById('r-pw').value;
+  const pw2=document.getElementById('r-pw2').value;
+  const company=document.getElementById('r-co').value.trim();
+  if(!name||!phone||!email||!pw){showToast('필수 항목을 모두 입력해주세요');return;}
+  if(pw!==pw2){showToast('비밀번호가 일치하지 않습니다');return;}
+  if(pw.length<8){showToast('비밀번호는 8자 이상이어야 합니다');return;}
   showToast('처리 중...');
-  const {data:existing} = await supa.from('users').select('id').eq('email',email).maybeSingle();
-  if (existing){showToast('이미 사용중인 이메일입니다');return;}
-  const pwHash = btoa(email+pw+'kiei2026salt');
-  const {data,error} = await supa.from('users').insert({name,phone,email,company,password_hash:pwHash,role:'MEMBER'}).select().single();
-  if (error){showToast('오류: '+error.message);return;}
+  const {data:ex}=await supa.from('users').select('id').eq('email',email).maybeSingle();
+  if(ex){showToast('이미 사용중인 이메일입니다');return;}
+  const pwHash=btoa(email+pw+'kiei2026salt');
+  const {data,error}=await supa.from('users').insert({name,phone,email,company,password_hash:pwHash,role:'MEMBER'}).select().single();
+  if(error){showToast('오류: '+error.message);return;}
   S.user=data;
   const a=document.getElementById('tauth');
   a.textContent=name+'님';a.onclick=()=>showPage('mypage');
@@ -1589,7 +1528,7 @@ async function submitContact() {
   ['c-name','c-co','c-phone','c-email','c-content'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
 }
 
-async function submitForm(type) {
+async function submitForm(t) {
   const company=document.getElementById('fp-co')?.value.trim();
   const name=document.getElementById('fp-name')?.value.trim();
   const phone=document.getElementById('fp-phone')?.value.trim();
@@ -1597,7 +1536,7 @@ async function submitForm(type) {
   if(!company||!name||!phone){showToast('필수 항목을 입력해주세요');return;}
   const {error}=await supa.from('inquiries').insert({name,phone,company,content,type:'강사 파견',status:'UNREAD'});
   if(error){showToast('오류: '+error.message);return;}
-  showToast('✅ '+type+' 완료! 담당자가 확인 후 연락드리겠습니다');
+  showToast('✅ '+t+' 완료! 담당자가 확인 후 연락드리겠습니다');
 }
 
 async function savePost() {
@@ -1605,7 +1544,6 @@ async function savePost() {
   const content=document.getElementById('post-content').value.trim();
   if(!title||!content){showToast('제목과 내용을 입력해주세요');return;}
   const tags=document.getElementById('post-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
-  showToast('저장 중...');
   const {data,error}=await supa.from('posts').insert({title,content,excerpt:content.substring(0,80)+'...',category:document.getElementById('post-cat').value,tags,icon:'📄',status:document.getElementById('post-status').value==='공개'?'published':'draft'}).select().single();
   if(error){showToast('오류: '+error.message);return;}
   S.posts.unshift({id:data.id,title,content,ex:content.substring(0,80)+'...',cat:data.category,tags,icon:'📄',views:0,status:'공개',date:new Date().toLocaleDateString('ko-KR')});
@@ -1617,7 +1555,7 @@ async function approveE(id) {
   if(error){showToast('오류: '+error.message);return;}
   const e=S.enrollments.find(x=>x.id===id);
   if(e)e.status='승인완료';
-  renderAdmin();showToast('✅ 승인 완료. 담당자가 연락드립니다');
+  renderAdmin();showToast('✅ 승인 완료');
 }
 
 async function loadPosts() {
@@ -1637,12 +1575,12 @@ async function loadNotices() {
 
 async function loadEnrollments() {
   const {data,error}=await supa.from('enrollments').select('*').order('applied_at',{ascending:false});
-  if(!error&&data){S.enrollments=data.map(e=>({id:e.id,name:e.applicant_name,company:e.company,course:e.course_name,phone:e.phone,email:e.email,date:new Date(e.applied_at).toLocaleDateString('ko-KR'),status:e.status,done:e.status==='수료완료'}));}
+  if(!error&&data)S.enrollments=data.map(e=>({id:e.id,name:e.applicant_name,company:e.company,course:e.course_name,phone:e.phone,email:e.email,date:new Date(e.applied_at).toLocaleDateString('ko-KR'),status:e.status,done:e.status==='수료완료'}));
 }
 
 async function loadUsers() {
   const {data,error}=await supa.from('users').select('*').order('created_at',{ascending:false});
-  if(!error&&data){S.users=data.map(u=>({id:u.id,name:u.name,email:u.email,phone:u.phone,company:u.company,joined:new Date(u.created_at).toLocaleDateString('ko-KR'),cnt:0,role:u.role}));}
+  if(!error&&data)S.users=data.map(u=>({id:u.id,name:u.name,email:u.email,phone:u.phone,company:u.company,joined:new Date(u.created_at).toLocaleDateString('ko-KR'),cnt:0,role:u.role}));
 }
 
 function doLogout(){
@@ -1659,18 +1597,13 @@ function restoreSession(){
 const _origRenderAdmin=renderAdmin;
 async function renderAdmin(){await loadEnrollments();await loadUsers();_origRenderAdmin();}
 
-// 초기화
 document.addEventListener('DOMContentLoaded',async()=>{
   seed();renderFAQ();renderCal();restoreSession();
   document.getElementById('tauth').onclick=()=>showPage('login');
   await loadPosts();
   await loadNotices();
   renderNotice();
-  // 홈 카카오맵 초기화
-  setTimeout(()=>initKakaoMap('kakao-map'),500);
 });
-
-console.log('✅ 카카오맵 + Supabase 완전 연동 완료');
 </script>
 </body>
 </html>
