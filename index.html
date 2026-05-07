@@ -326,13 +326,28 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-  .leaflet-container { font-family: 'Noto Sans KR', sans-serif; }
-</style>
 <script>
-const SUPA_URL = 'https://dwycuwrbhbjvabgqcefl.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eWN1d3JiaGJqdmFiZ3FjZWZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMjY1MjMsImV4cCI6MjA5MzcwMjUyM30.3jxje-NCqOTjvor33LWmEAk-5xaliLkYZgpNbmWwBQg';
-const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+// Supabase 클라이언트
+const supa = supabase.createClient('https://dwycuwrbhbjvabgqcefl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eWN1d3JiaGJqdmFiZ3FjZWZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMjY1MjMsImV4cCI6MjA5MzcwMjUyM30.3jxje-NCqOTjvor33LWmEAk-5xaliLkYZgpNbmWwBQg');
+
+// OpenStreetMap 지도
+let _mapInst = {};
+function initOSMMap(id) {
+  const el = document.getElementById(id);
+  if (!el || _mapInst[id]) return;
+  const map = L.map(id).setView([35.2310, 129.0174], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+  const icon = L.divIcon({
+    html: '<div style="background:#2A7D3B;width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>',
+    iconSize:[32,32], iconAnchor:[16,32], className:''
+  });
+  L.marker([35.2310, 129.0174], {icon}).addTo(map)
+    .bindPopup('<strong style="color:#1A5E29">한국산업교육연구소 안전교육센터</strong><br><span style="font-size:11px">부산 북구 금곡대로 458 금곡월드프라자 3층</span><br><span style="font-size:11px">📞 051-327-5604</span>')
+    .openPopup();
+  _mapInst[id] = map;
+}
 </script>
 </head>
 <body>
@@ -510,7 +525,7 @@ const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
       <div class="crow"><div class="cbox">🌐</div><div><strong>블로그</strong><p>blog.naver.com/1990kiei</p></div></div>
     </div>
     <div>
-      <div id="osm-map1" style="width:100%;height:300px;border-radius:var(--r);border:1.5px solid var(--g2);overflow:hidden;z-index:1"></div>
+      <div id="osm-map1" style="width:100%;height:300px;border-radius:var(--r);border:1.5px solid var(--g2);overflow:hidden"></div>
       <a href="https://www.openstreetmap.org/?mlat=35.2310&mlon=129.0174#map=17/35.2310/129.0174" target="_blank"
         style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:13px;color:var(--gm);font-weight:700;text-decoration:none">
         🗺️ 지도에서 크게 보기 →
@@ -709,7 +724,7 @@ const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
         <div class="crow"><div class="cbox">🕐</div><div><strong>운영시간</strong><p>평일 09:00~18:00 / 주말·공휴일 휴무</p></div></div>
       </div>
       <div>
-        <div id="osm-map2" style="width:100%;height:300px;border-radius:var(--r);border:1.5px solid var(--g2);overflow:hidden;z-index:1"></div>
+        <div id="osm-map2" style="width:100%;height:300px;border-radius:var(--r);border:1.5px solid var(--g2);overflow:hidden"></div>
         <a href="https://www.openstreetmap.org/?mlat=35.2310&mlon=129.0174#map=17/35.2310/129.0174" target="_blank"
           style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:13px;color:var(--gm);font-weight:700;text-decoration:none">
           🗺️ 지도에서 크게 보기 →
@@ -1129,38 +1144,9 @@ function switchTab(btn,pid){
 }
 
 // AUTH
-function doLogin(){
-  const email=document.getElementById('l-email').value.trim();
-  const pw=document.getElementById('l-pw').value;
-  if(!email||!pw){showToast('이메일과 비밀번호를 입력해주세요');return;}
-  const saved=JSON.parse(localStorage.getItem('kiei_users')||'[]');
-  const found=saved.find(u=>u.email===email&&u.pw===pw);
-  if(found){
-    S.user=found;
-    const a=document.getElementById('tauth');
-    a.textContent=found.name+'님';a.onclick=()=>showPage('mypage');
-    showToast('환영합니다, '+found.name+'님!');showPage('home');
-  }else showToast('이메일 또는 비밀번호가 올바르지 않습니다');
-}
-function doRegister(){
-  const name=document.getElementById('r-name').value.trim();
-  const phone=document.getElementById('r-phone').value.trim();
-  const email=document.getElementById('r-email').value.trim();
-  const pw=document.getElementById('r-pw').value;
-  const pw2=document.getElementById('r-pw2').value;
-  if(!name||!phone||!email||!pw){showToast('필수 항목을 모두 입력해주세요');return;}
-  if(pw!==pw2){showToast('비밀번호가 일치하지 않습니다');return;}
-  if(pw.length<8){showToast('비밀번호는 8자 이상이어야 합니다');return;}
-  const saved=JSON.parse(localStorage.getItem('kiei_users')||'[]');
-  if(saved.find(u=>u.email===email)){showToast('이미 사용중인 이메일입니다');return;}
-  const nu={id:'u'+Date.now(),name,phone,email,pw,company:document.getElementById('r-co').value,role:'MEMBER',joined:new Date().toLocaleDateString('ko-KR')};
-  saved.push(nu);localStorage.setItem('kiei_users',JSON.stringify(saved));
-  S.user=nu;
-  const a=document.getElementById('tauth');
-  a.textContent=name+'님';a.onclick=()=>showPage('mypage');
-  showToast('회원가입 완료! 환영합니다, '+name+'님');showPage('home');
-}
-function doLogout(){S.user=null;const a=document.getElementById('tauth');a.textContent='로그인';a.onclick=()=>showPage('login');showToast('로그아웃 되었습니다');showPage('home');}
+function doLogin(){/* → Supabase 버전 사용 */}
+function doRegister(){/* → Supabase 버전 사용 */}
+function doLogout(){/* → Supabase 버전 사용 */}
 function doAdminLogin(){
   const id=document.getElementById('adm-id').value;
   const pw=document.getElementById('adm-pw').value;
@@ -1232,29 +1218,11 @@ function renderRes(){
 }
 
 // APPLY
-function submitApply(){
-  const course=document.getElementById('a-course').value;
-  const name=document.getElementById('a-name').value.trim();
-  const company=document.getElementById('a-co').value.trim();
-  const phone=document.getElementById('a-phone').value.trim();
-  const email=document.getElementById('a-email').value.trim();
-  if(!course||!name||!company||!phone||!email){showToast('필수 항목을 모두 입력해주세요');return;}
-  S.enrollments.unshift({id:'e'+Date.now(),name,company,course,phone,email,date:new Date().toLocaleDateString('ko-KR'),status:'대기중',done:false});
-  showToast('✅ 교육 신청 완료! 이메일로 확인서가 발송됩니다');
-  ['a-course','a-name','a-co','a-pos','a-cnt','a-phone','a-email','a-date','a-memo'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  showPage('home');
-}
+function submitApply(){/* → Supabase 버전 사용 */}
 
 // CONTACT
-function submitContact(){
-  const name=document.getElementById('c-name').value.trim();
-  const phone=document.getElementById('c-phone').value.trim();
-  const content=document.getElementById('c-content').value.trim();
-  if(!name||!phone||!content){showToast('이름, 연락처, 문의 내용은 필수입니다');return;}
-  showToast('✅ 문의가 접수되었습니다. 빠르게 연락드리겠습니다!');
-  ['c-name','c-co','c-phone','c-email','c-content'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-}
-function submitForm(t){showToast('✅ '+t+' 완료! 담당자가 확인 후 연락드리겠습니다');}
+function submitContact(){/* → Supabase 버전 사용 */}
+function submitForm(t){ /* Supabase 버전으로 대체됨 */ }
 
 // MYPAGE
 function renderMypage(){
@@ -1378,18 +1346,12 @@ function renderAdmCert(){
     <td style="font-size:12px;color:var(--g4)">${c.no}</td>
     <td>${c.issued?`<button class="bp bsm" onclick="viewCert('${c.name}','${c.course}','${c.date}','${c.no}')">📄 보기</button>`:`<button class="bs bsm" onclick="issueCert('${c.id}')">발급</button>`}</td></tr>`).join('');
 }
-function approveE(id){const e=S.enrollments.find(x=>x.id===id);if(e){e.status='승인완료';renderAdmin();showToast('✅ 승인 완료. 이메일이 발송됩니다');}}
+function approveE(){/* → Supabase 버전 사용 */}
 function issueCert(id){const c=S.certs.find(x=>x.id===id);if(c){c.issued=true;renderAdmCert();showToast('수료증이 발급되었습니다');}}
 function delPost(id){if(!confirm('삭제하시겠습니까?'))return;S.posts=S.posts.filter(p=>p.id!==id);renderAdmContent();showToast('삭제되었습니다');}
 function delRes(id){if(!confirm('삭제하시겠습니까?'))return;S.resources=S.resources.filter(r=>r.id!==id);renderAdmRes();showToast('삭제되었습니다');}
 function delNotice(id){if(!confirm('삭제하시겠습니까?'))return;S.notices=S.notices.filter(n=>n.id!==id);renderAdmNotice();showToast('삭제되었습니다');}
-function savePost(){
-  const title=document.getElementById('post-title').value.trim();
-  const content=document.getElementById('post-content').value.trim();
-  if(!title||!content){showToast('제목과 내용을 입력해주세요');return;}
-  S.posts.unshift({id:'p'+Date.now(),title,content,cat:document.getElementById('post-cat').value,status:document.getElementById('post-status').value,date:new Date().toLocaleDateString('ko-KR'),tags:document.getElementById('post-tags').value.split(',').map(t=>t.trim()).filter(Boolean),ex:content.substring(0,60)+'...',icon:'📄',views:0});
-  closeM('modal-post');renderAdmContent();showToast('글이 등록되었습니다');
-}
+function savePost(){/* → Supabase 버전 사용 */}
 function applyColor(v){document.getElementById('c-hex').textContent=v;document.documentElement.style.setProperty('--gm',v);document.documentElement.style.setProperty('--gd',v);}
 function saveSettings(){applyColor(document.getElementById('c-primary').value);showToast('✅ 설정이 저장되었습니다');}
 
@@ -1460,222 +1422,220 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <script>
-// ── OpenStreetMap (Leaflet) 초기화 ──
-const KIEI_LAT = 35.2310;
-const KIEI_LNG = 129.0174;
-const KIEI_NAME = '한국산업교육연구소 안전교육센터';
-const KIEI_ADDR = '부산 북구 금곡대로 458 금곡월드프라자 3층';
-let mapInstances = {};
+// ══════════════════════════════════════
+// 기존 함수 오버라이드 (충돌 방지)
+// ══════════════════════════════════════
 
-function initOSMMap(id) {
-  const el = document.getElementById(id);
-  if (!el || mapInstances[id]) return;
-
-  const map = L.map(id, { zoomControl: true }).setView([KIEI_LAT, KIEI_LNG], 16);
-
-  // OpenStreetMap 타일
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 19
-  }).addTo(map);
-
-  // 커스텀 마커 (초록색)
-  const icon = L.divIcon({
-    html: `<div style="
-      background:#2A7D3B;
-      width:36px;height:36px;
-      border-radius:50% 50% 50% 0;
-      transform:rotate(-45deg);
-      border:3px solid #fff;
-      box-shadow:0 2px 8px rgba(0,0,0,0.3)">
-    </div>`,
-    iconSize: [36, 36],
-    iconAnchor: [18, 36],
-    className: ''
-  });
-
-  const marker = L.marker([KIEI_LAT, KIEI_LNG], { icon }).addTo(map);
-
-  // 팝업
-  marker.bindPopup(`
-    <div style="padding:4px;min-width:200px">
-      <strong style="color:#1A5E29;font-size:13px">${KIEI_NAME}</strong><br>
-      <span style="font-size:11px;color:#6B7B6C">${KIEI_ADDR}</span><br>
-      <span style="font-size:11px;color:#6B7B6C">📞 051-327-5604</span>
-    </div>
-  `, { maxWidth: 250 }).openPopup();
-
-  mapInstances[id] = map;
-}
-
-// 페이지 이동 시 지도 초기화
-const _origShowPage = showPage;
+// showPage 오버라이드 — 지도 초기화 포함
+const __origShowPage = showPage;
 function showPage(p) {
-  _origShowPage(p);
-  if (p === 'home') {
-    setTimeout(() => {
-      initOSMMap('osm-map1');
-      if (mapInstances['osm-map1']) mapInstances['osm-map1'].invalidateSize();
-    }, 300);
-  }
-  if (p === 'contact') {
-    setTimeout(() => {
-      initOSMMap('osm-map2');
-      if (mapInstances['osm-map2']) mapInstances['osm-map2'].invalidateSize();
-    }, 300);
-  }
+  __origShowPage(p);
+  if (p === 'home')    setTimeout(() => { initOSMMap('osm-map1'); if(_mapInst['osm-map1']) _mapInst['osm-map1'].invalidateSize(); }, 400);
+  if (p === 'contact') setTimeout(() => { initOSMMap('osm-map2'); if(_mapInst['osm-map2']) _mapInst['osm-map2'].invalidateSize(); }, 400);
 }
 
-// ── Supabase 연동 ──
+// ── 회원가입 ──
 async function doRegister() {
-  const name=document.getElementById('r-name').value.trim();
-  const phone=document.getElementById('r-phone').value.trim();
-  const email=document.getElementById('r-email').value.trim();
-  const pw=document.getElementById('r-pw').value;
-  const pw2=document.getElementById('r-pw2').value;
-  const company=document.getElementById('r-co').value.trim();
-  if(!name||!phone||!email||!pw){showToast('필수 항목을 모두 입력해주세요');return;}
-  if(pw!==pw2){showToast('비밀번호가 일치하지 않습니다');return;}
-  if(pw.length<8){showToast('비밀번호는 8자 이상이어야 합니다');return;}
+  const name    = document.getElementById('r-name').value.trim();
+  const phone   = document.getElementById('r-phone').value.trim();
+  const email   = document.getElementById('r-email').value.trim();
+  const pw      = document.getElementById('r-pw').value;
+  const pw2     = document.getElementById('r-pw2').value;
+  const company = document.getElementById('r-co').value.trim();
+  if (!name||!phone||!email||!pw) { showToast('필수 항목을 모두 입력해주세요'); return; }
+  if (pw !== pw2)   { showToast('비밀번호가 일치하지 않습니다'); return; }
+  if (pw.length < 8){ showToast('비밀번호는 8자 이상이어야 합니다'); return; }
   showToast('처리 중...');
-  const {data:ex}=await supa.from('users').select('id').eq('email',email).maybeSingle();
-  if(ex){showToast('이미 사용중인 이메일입니다');return;}
-  const pwHash=btoa(email+pw+'kiei2026salt');
-  const {data,error}=await supa.from('users').insert({name,phone,email,company,password_hash:pwHash,role:'MEMBER'}).select().single();
-  if(error){showToast('오류: '+error.message);return;}
-  S.user=data;
-  const a=document.getElementById('tauth');
-  a.textContent=name+'님';a.onclick=()=>showPage('mypage');
-  localStorage.setItem('kiei_session',JSON.stringify(data));
-  showToast('✅ 회원가입 완료! 환영합니다, '+name+'님');
+  const { data: ex } = await supa.from('users').select('id').eq('email', email).maybeSingle();
+  if (ex) { showToast('이미 사용중인 이메일입니다'); return; }
+  const pwHash = btoa(email + pw + 'kiei2026salt');
+  const { data, error } = await supa.from('users').insert({ name, phone, email, company, password_hash: pwHash, role: 'MEMBER' }).select().single();
+  if (error) { showToast('오류: ' + error.message); return; }
+  S.user = data;
+  const a = document.getElementById('tauth');
+  a.textContent = name + '님'; a.onclick = () => showPage('mypage');
+  localStorage.setItem('kiei_session', JSON.stringify(data));
+  showToast('✅ 회원가입 완료! 환영합니다, ' + name + '님');
   showPage('home');
 }
 
+// ── 로그인 ──
 async function doLogin() {
-  const email=document.getElementById('l-email').value.trim();
-  const pw=document.getElementById('l-pw').value;
-  if(!email||!pw){showToast('이메일과 비밀번호를 입력해주세요');return;}
+  const email = document.getElementById('l-email').value.trim();
+  const pw    = document.getElementById('l-pw').value;
+  if (!email || !pw) { showToast('이메일과 비밀번호를 입력해주세요'); return; }
   showToast('로그인 중...');
-  const pwHash=btoa(email+pw+'kiei2026salt');
-  const {data,error}=await supa.from('users').select('*').eq('email',email).eq('password_hash',pwHash).maybeSingle();
-  if(error||!data){showToast('이메일 또는 비밀번호가 올바르지 않습니다');return;}
-  S.user=data;
-  const a=document.getElementById('tauth');
-  a.textContent=data.name+'님';a.onclick=()=>showPage('mypage');
-  localStorage.setItem('kiei_session',JSON.stringify(data));
-  showToast('환영합니다, '+data.name+'님!');
+  const pwHash = btoa(email + pw + 'kiei2026salt');
+  const { data, error } = await supa.from('users').select('*').eq('email', email).eq('password_hash', pwHash).maybeSingle();
+  if (error || !data) { showToast('이메일 또는 비밀번호가 올바르지 않습니다'); return; }
+  S.user = data;
+  const a = document.getElementById('tauth');
+  a.textContent = data.name + '님'; a.onclick = () => showPage('mypage');
+  localStorage.setItem('kiei_session', JSON.stringify(data));
+  showToast('환영합니다, ' + data.name + '님!');
   showPage('home');
 }
 
-async function submitApply() {
-  const course=document.getElementById('a-course').value;
-  const name=document.getElementById('a-name').value.trim();
-  const company=document.getElementById('a-co').value.trim();
-  const phone=document.getElementById('a-phone').value.trim();
-  const email=document.getElementById('a-email').value.trim();
-  const memo=document.getElementById('a-memo').value.trim();
-  if(!course||!name||!company||!phone||!email){showToast('필수 항목을 모두 입력해주세요');return;}
-  showToast('신청 중...');
-  const {data,error}=await supa.from('enrollments').insert({course_name:course,applicant_name:name,company,phone,email,memo,status:'대기중'}).select().single();
-  if(error){showToast('오류: '+error.message);return;}
-  S.enrollments.unshift({id:data.id,name,company,course,phone,email,date:new Date().toLocaleDateString('ko-KR'),status:'대기중',done:false});
-  showToast('✅ 교육 신청 완료! 담당자가 확인 후 연락드립니다');
-  ['a-course','a-name','a-co','a-pos','a-cnt','a-phone','a-email','a-date','a-memo'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+// ── 로그아웃 ──
+function doLogout() {
+  S.user = null;
+  localStorage.removeItem('kiei_session');
+  const a = document.getElementById('tauth');
+  a.textContent = '로그인'; a.onclick = () => showPage('login');
+  showToast('로그아웃 되었습니다');
   showPage('home');
 }
 
-async function submitContact() {
-  const name=document.getElementById('c-name').value.trim();
-  const phone=document.getElementById('c-phone').value.trim();
-  const content=document.getElementById('c-content').value.trim();
-  const company=document.getElementById('c-co').value.trim();
-  const email=document.getElementById('c-email').value.trim();
-  const type=document.getElementById('c-type').value;
-  if(!name||!phone||!content){showToast('이름, 연락처, 문의 내용은 필수입니다');return;}
-  showToast('접수 중...');
-  const {error}=await supa.from('inquiries').insert({name,phone,content,company,email,type,status:'UNREAD'});
-  if(error){showToast('오류: '+error.message);return;}
-  showToast('✅ 문의가 접수되었습니다. 빠르게 연락드리겠습니다!');
-  ['c-name','c-co','c-phone','c-email','c-content'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-}
-
-async function submitForm(t) {
-  const company=document.getElementById('fp-co')?.value.trim();
-  const name=document.getElementById('fp-name')?.value.trim();
-  const phone=document.getElementById('fp-phone')?.value.trim();
-  const content=document.getElementById('fp-content')?.value.trim();
-  if(!company||!name||!phone){showToast('필수 항목을 입력해주세요');return;}
-  const {error}=await supa.from('inquiries').insert({name,phone,company,content,type:'강사 파견',status:'UNREAD'});
-  if(error){showToast('오류: '+error.message);return;}
-  showToast('✅ '+t+' 완료! 담당자가 확인 후 연락드리겠습니다');
-}
-
-async function savePost() {
-  const title=document.getElementById('post-title').value.trim();
-  const content=document.getElementById('post-content').value.trim();
-  if(!title||!content){showToast('제목과 내용을 입력해주세요');return;}
-  const tags=document.getElementById('post-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
-  const {data,error}=await supa.from('posts').insert({title,content,excerpt:content.substring(0,80)+'...',category:document.getElementById('post-cat').value,tags,icon:'📄',status:document.getElementById('post-status').value==='공개'?'published':'draft'}).select().single();
-  if(error){showToast('오류: '+error.message);return;}
-  S.posts.unshift({id:data.id,title,content,ex:content.substring(0,80)+'...',cat:data.category,tags,icon:'📄',views:0,status:'공개',date:new Date().toLocaleDateString('ko-KR')});
-  closeM('modal-post');renderAdmContent();showToast('✅ 글이 등록되었습니다');
-}
-
-async function approveE(id) {
-  const {error}=await supa.from('enrollments').update({status:'승인완료'}).eq('id',id);
-  if(error){showToast('오류: '+error.message);return;}
-  const e=S.enrollments.find(x=>x.id===id);
-  if(e)e.status='승인완료';
-  renderAdmin();showToast('✅ 승인 완료');
-}
-
-async function loadPosts() {
-  const {data,error}=await supa.from('posts').select('*').eq('status','published').order('created_at',{ascending:false});
-  if(!error&&data&&data.length>0){
-    S.posts=data.map(p=>({id:p.id,title:p.title,content:p.content,ex:p.excerpt||(p.content?p.content.substring(0,80)+'...':''),cat:p.category||'안전정보',tags:p.tags||[],icon:p.icon||'📄',views:p.view_count||0,status:'공개',date:new Date(p.created_at).toLocaleDateString('ko-KR')}));
+// ── 세션 복원 ──
+function restoreSession() {
+  const saved = localStorage.getItem('kiei_session');
+  if (saved) {
+    try {
+      S.user = JSON.parse(saved);
+      const a = document.getElementById('tauth');
+      a.textContent = S.user.name + '님';
+      a.onclick = () => showPage('mypage');
+    } catch(e) {}
   }
-  renderBlog();renderHomePosts();
+}
+
+// ── 교육 신청 ──
+async function submitApply() {
+  const course  = document.getElementById('a-course').value;
+  const name    = document.getElementById('a-name').value.trim();
+  const company = document.getElementById('a-co').value.trim();
+  const phone   = document.getElementById('a-phone').value.trim();
+  const email   = document.getElementById('a-email').value.trim();
+  const memo    = document.getElementById('a-memo').value.trim();
+  if (!course||!name||!company||!phone||!email) { showToast('필수 항목을 모두 입력해주세요'); return; }
+  showToast('신청 중...');
+  const { data, error } = await supa.from('enrollments').insert({ course_name: course, applicant_name: name, company, phone, email, memo, status: '대기중' }).select().single();
+  if (error) { showToast('오류: ' + error.message); return; }
+  S.enrollments.unshift({ id: data.id, name, company, course, phone, email, date: new Date().toLocaleDateString('ko-KR'), status: '대기중', done: false });
+  showToast('✅ 교육 신청 완료! 담당자가 확인 후 연락드립니다');
+  ['a-course','a-name','a-co','a-pos','a-cnt','a-phone','a-email','a-date','a-memo'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  showPage('home');
+}
+
+// ── 문의 접수 ──
+async function submitContact() {
+  const name    = document.getElementById('c-name').value.trim();
+  const phone   = document.getElementById('c-phone').value.trim();
+  const content = document.getElementById('c-content').value.trim();
+  const company = document.getElementById('c-co').value.trim();
+  const email   = document.getElementById('c-email').value.trim();
+  const type    = document.getElementById('c-type').value;
+  if (!name||!phone||!content) { showToast('이름, 연락처, 문의 내용은 필수입니다'); return; }
+  showToast('접수 중...');
+  const { error } = await supa.from('inquiries').insert({ name, phone, content, company, email, type, status: 'UNREAD' });
+  if (error) { showToast('오류: ' + error.message); return; }
+  showToast('✅ 문의가 접수되었습니다. 빠르게 연락드리겠습니다!');
+  ['c-name','c-co','c-phone','c-email','c-content'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+}
+
+// ── 강사 파견 신청 ──
+async function submitForm(t) {
+  const company = document.getElementById('fp-co')?.value.trim();
+  const name    = document.getElementById('fp-name')?.value.trim();
+  const phone   = document.getElementById('fp-phone')?.value.trim();
+  const content = document.getElementById('fp-content')?.value.trim();
+  if (!company||!name||!phone) { showToast('필수 항목을 입력해주세요'); return; }
+  const { error } = await supa.from('inquiries').insert({ name, phone, company, content, type: '강사 파견', status: 'UNREAD' });
+  if (error) { showToast('오류: ' + error.message); return; }
+  showToast('✅ ' + t + ' 완료! 담당자가 확인 후 연락드리겠습니다');
+}
+
+// ── 글 저장 (관리자) ──
+async function savePost() {
+  const title   = document.getElementById('post-title').value.trim();
+  const content = document.getElementById('post-content').value.trim();
+  if (!title||!content) { showToast('제목과 내용을 입력해주세요'); return; }
+  const tags = document.getElementById('post-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const { data, error } = await supa.from('posts').insert({
+    title, content, excerpt: content.substring(0,80)+'...',
+    category: document.getElementById('post-cat').value,
+    tags, icon: '📄',
+    status: document.getElementById('post-status').value === '공개' ? 'published' : 'draft'
+  }).select().single();
+  if (error) { showToast('오류: ' + error.message); return; }
+  S.posts.unshift({ id: data.id, title, content, ex: content.substring(0,80)+'...', cat: data.category, tags, icon: '📄', views: 0, status: '공개', date: new Date().toLocaleDateString('ko-KR') });
+  closeM('modal-post'); renderAdmContent(); showToast('✅ 글이 등록되었습니다');
+}
+
+// ── 신청 승인 (관리자) ──
+async function approveE(id) {
+  const { error } = await supa.from('enrollments').update({ status: '승인완료' }).eq('id', id);
+  if (error) { showToast('오류: ' + error.message); return; }
+  const e = S.enrollments.find(x => x.id === id);
+  if (e) e.status = '승인완료';
+  renderAdmin(); showToast('✅ 승인 완료');
+}
+
+// ── DB 데이터 로드 ──
+async function loadPosts() {
+  const { data, error } = await supa.from('posts').select('*').eq('status','published').order('created_at',{ascending:false});
+  if (!error && data && data.length > 0) {
+    S.posts = data.map(p => ({
+      id: p.id, title: p.title, content: p.content,
+      ex: p.excerpt || (p.content ? p.content.substring(0,80)+'...' : ''),
+      cat: p.category || '안전정보', tags: p.tags || [],
+      icon: p.icon || '📄', views: p.view_count || 0,
+      status: '공개', date: new Date(p.created_at).toLocaleDateString('ko-KR')
+    }));
+  }
+  renderBlog(); renderHomePosts();
 }
 
 async function loadNotices() {
-  const {data,error}=await supa.from('notices').select('*').order('is_pinned',{ascending:false}).order('created_at',{ascending:false});
-  if(!error&&data&&data.length>0){
-    S.notices=data.map(n=>({id:n.id,title:n.title,date:new Date(n.created_at).toLocaleDateString('ko-KR'),views:n.view_count||0,pin:n.is_pinned}));
+  const { data, error } = await supa.from('notices').select('*').order('is_pinned',{ascending:false}).order('created_at',{ascending:false});
+  if (!error && data && data.length > 0) {
+    S.notices = data.map(n => ({
+      id: n.id, title: n.title,
+      date: new Date(n.created_at).toLocaleDateString('ko-KR'),
+      views: n.view_count || 0, pin: n.is_pinned
+    }));
   }
 }
 
 async function loadEnrollments() {
-  const {data,error}=await supa.from('enrollments').select('*').order('applied_at',{ascending:false});
-  if(!error&&data)S.enrollments=data.map(e=>({id:e.id,name:e.applicant_name,company:e.company,course:e.course_name,phone:e.phone,email:e.email,date:new Date(e.applied_at).toLocaleDateString('ko-KR'),status:e.status,done:e.status==='수료완료'}));
+  const { data, error } = await supa.from('enrollments').select('*').order('applied_at',{ascending:false});
+  if (!error && data) {
+    S.enrollments = data.map(e => ({
+      id: e.id, name: e.applicant_name, company: e.company,
+      course: e.course_name, phone: e.phone, email: e.email,
+      date: new Date(e.applied_at).toLocaleDateString('ko-KR'),
+      status: e.status, done: e.status === '수료완료'
+    }));
+  }
 }
 
 async function loadUsers() {
-  const {data,error}=await supa.from('users').select('*').order('created_at',{ascending:false});
-  if(!error&&data)S.users=data.map(u=>({id:u.id,name:u.name,email:u.email,phone:u.phone,company:u.company,joined:new Date(u.created_at).toLocaleDateString('ko-KR'),cnt:0,role:u.role}));
+  const { data, error } = await supa.from('users').select('*').order('created_at',{ascending:false});
+  if (!error && data) {
+    S.users = data.map(u => ({
+      id: u.id, name: u.name, email: u.email,
+      phone: u.phone, company: u.company,
+      joined: new Date(u.created_at).toLocaleDateString('ko-KR'),
+      cnt: 0, role: u.role
+    }));
+  }
 }
 
-function doLogout(){
-  S.user=null;localStorage.removeItem('kiei_session');
-  const a=document.getElementById('tauth');a.textContent='로그인';a.onclick=()=>showPage('login');
-  showToast('로그아웃 되었습니다');showPage('home');
+// ── 관리자 오버라이드 ──
+const __origRenderAdmin = renderAdmin;
+async function renderAdmin() {
+  await loadEnrollments();
+  await loadUsers();
+  __origRenderAdmin();
 }
 
-function restoreSession(){
-  const saved=localStorage.getItem('kiei_session');
-  if(saved){try{S.user=JSON.parse(saved);const a=document.getElementById('tauth');a.textContent=S.user.name+'님';a.onclick=()=>showPage('mypage');}catch(e){}}
-}
-
-const _origRenderAdmin=renderAdmin;
-async function renderAdmin(){await loadEnrollments();await loadUsers();_origRenderAdmin();}
-
-document.addEventListener('DOMContentLoaded',async()=>{
-  seed();renderFAQ();renderCal();restoreSession();
-  document.getElementById('tauth').onclick=()=>showPage('login');
+// ── 최종 초기화 (DOMContentLoaded 이후 실행) ──
+window.addEventListener('load', async () => {
+  restoreSession();
   await loadPosts();
   await loadNotices();
   renderNotice();
-  // 홈 지도 초기화
-  setTimeout(()=>initOSMMap('osm-map1'),500);
+  setTimeout(() => initOSMMap('osm-map1'), 500);
 });
 </script>
 </body>
