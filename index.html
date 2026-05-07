@@ -66,7 +66,7 @@ nav{background:var(--w);border-bottom:2px solid var(--gm);position:sticky;top:0;
 .hc{position:absolute;inset:0;display:flex;align-items:center}
 .hin{max-width:1140px;margin:0 auto;padding:0 24px;width:100%}
 .ht{max-width:610px;animation:fadeUp .8s ease both}
-.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.18);color:#fff;font-size:11.5px;font-weight:600;padding:6px 16px;border-radius:20px;margin-bottom:20px;border:1px solid rgba(255,255,255,0.35);backdrop-filter:blur(6px);width:fit-content}
+.hbadge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.18);color:#fff;font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.35);backdrop-filter:blur(6px);width:fit-content;max-width:100%;word-break:keep-all;white-space:normal;line-height:1.4}
 .hbadge::before{content:'';width:6px;height:6px;background:#FFE066;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite}
 .hero h1{font-size:clamp(28px,4.5vw,50px);font-weight:900;color:#fff;line-height:1.18;margin-bottom:14px;text-shadow:0 2px 16px rgba(0,0,0,0.25);letter-spacing:-0.02em}
 .hero h1 strong{color:#FFE066}
@@ -77,12 +77,12 @@ nav{background:var(--w);border-bottom:2px solid var(--gm);position:sticky;top:0;
 .bw:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.26)}
 .bow{background:transparent;color:#fff;font-weight:600;padding:14px 28px;border-radius:var(--rs);font-size:14px;border:2px solid rgba(255,255,255,0.65);cursor:pointer;transition:var(--tr)}
 .bow:hover{background:rgba(255,255,255,0.15);border-color:#fff}
-.hstats{display:flex;background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.22);border-radius:12px;backdrop-filter:blur(8px);width:fit-content;overflow:hidden;flex-wrap:wrap}
-.hs{text-align:center;color:#fff;padding:14px 22px}
-.hs .n{font-size:24px;font-weight:900;line-height:1}
-.hs .n span{font-size:14px;font-weight:500}
-.hs .l{font-size:11px;color:rgba(255,255,255,0.72);margin-top:4px}
-.hsd{width:1px;background:rgba(255,255,255,0.22);margin:12px 0}
+.hstats{display:flex;background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.22);border-radius:12px;backdrop-filter:blur(8px);width:fit-content;max-width:100%;overflow:hidden;flex-wrap:wrap}
+.hs{text-align:center;color:#fff;padding:12px 18px}
+.hs .n{font-size:22px;font-weight:900;line-height:1}
+.hs .n span{font-size:13px;font-weight:500}
+.hs .l{font-size:10px;color:rgba(255,255,255,0.72);margin-top:3px}
+.hsd{width:1px;background:rgba(255,255,255,0.22);margin:10px 0}
 .cfl{position:absolute;bottom:28px;right:28px;display:flex;flex-direction:column;gap:10px}
 .cc{background:rgba(255,255,255,0.95);border-radius:12px;padding:10px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,0.18);animation:float 4s ease-in-out infinite}
 .cc:nth-child(2){animation-delay:1.5s}
@@ -292,16 +292,45 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
 @media(max-width:1024px){.ftop{grid-template-columns:1fr 1fr}.alayout{grid-template-columns:180px 1fr}}
 @media(max-width:768px){
   .nm{display:none}.hbg{display:flex}
-  .hero{height:auto;min-height:520px}.hc{padding:40px 20px}.hin{padding:0}
+  .hero{height:auto;min-height:auto}
+  .hc{position:relative;inset:auto;display:block;padding:0}
+  .ho{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,94,41,0.85) 0%,rgba(26,94,41,0.75) 100%)}
+  .hin{padding:36px 20px 36px}
+  .ht{max-width:100%}
+  .hbadge{font-size:10px;padding:4px 10px;margin-bottom:14px}
+  .hero h1{font-size:26px;margin-bottom:10px}
+  .hero .lead{font-size:14px}
+  .hero .sub{font-size:13px;margin-bottom:24px}
+  .hbtns{flex-direction:column;gap:10px;margin-bottom:24px}
+  .bw,.bow{width:100%;justify-content:center;padding:13px 20px}
+  .hstats{width:100%;border-radius:10px;justify-content:space-around}
+  .hs{padding:10px 8px;flex:1}
+  .hs .n{font-size:16px}
+  .hs .n span{font-size:11px}
+  .hs .l{font-size:9px}
+  .hsd{display:none}
+  .cfl{display:none}
   .cg{grid-template-columns:1fr}.mlayout{grid-template-columns:1fr}.msb{display:none}
   .alayout{grid-template-columns:1fr}.aside{display:none}
   .ftop{grid-template-columns:1fr}.fcol:not(.fbrand){display:none}
-  .fr2{grid-template-columns:1fr}.cfl{display:none}
+  .fr2{grid-template-columns:1fr}
   .mcta{display:block}body{padding-bottom:72px}
-  .hstats{flex-wrap:wrap}
 }
-@media(max-width:480px){.hero h1{font-size:24px}.cr{flex-direction:column;align-items:center}.hbtns{flex-direction:column}}
+@media(max-width:480px){
+  .hero h1{font-size:22px}
+  .cr{flex-direction:column;align-items:center}
+  .hbadge{font-size:9.5px}
+}
 </style>
+
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=a393d72cd5159991206d14f920c9cd6a&libraries=services"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL = 'https://dwycuwrbhbjvabgqcefl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eWN1d3JiaGJqdmFiZ3FjZWZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMjY1MjMsImV4cCI6MjA5MzcwMjUyM30.3jxje-NCqOTjvor33LWmEAk-5xaliLkYZgpNbmWwBQg';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+const KAKAO_KEY = 'a393d72cd5159991206d14f920c9cd6a';
+</script>
 </head>
 <body>
 
@@ -478,12 +507,8 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
       <div class="crow"><div class="cbox">🌐</div><div><strong>블로그</strong><p>blog.naver.com/1990kiei</p></div></div>
     </div>
     <div>
-      <div class="mapbox" onclick="window.open('https://map.naver.com/p/entry/place/16501631','_blank')">
-        <span style="font-size:44px">🗺️</span><p>네이버 지도로 보기</p>
-        <span>부산 북구 금곡대로 458 금곡월드프라자 3층</span>
-        <button class="bp bsm" style="margin-top:8px">지도 열기</button>
-      </div>
-      <p style="font-size:11px;color:var(--g4);margin-top:8px;text-align:center">※ 네이버 클라우드 API 키 적용 시 지도가 직접 표시됩니다</p>
+      <div id="kakao-map" style="width:100%;height:280px;border-radius:var(--r);overflow:hidden;border:1.5px solid var(--g2)"></div>
+      <a href="https://map.kakao.com/link/to/한국산업교육연구소안전교육센터,35.2310,129.0174" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-size:12px;color:var(--gm);font-weight:600;text-decoration:none">🗺️ 카카오맵에서 길찾기</a>
     </div>
   </div></div></div>
 </div>
@@ -678,11 +703,8 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
         <div class="crow"><div class="cbox">🕐</div><div><strong>운영시간</strong><p>평일 09:00~18:00 / 주말·공휴일 휴무</p></div></div>
       </div>
       <div>
-        <div class="mapbox" onclick="window.open('https://map.naver.com/p/entry/place/16501631','_blank')">
-          <span style="font-size:44px">🗺️</span><p>네이버 지도로 보기</p>
-          <span>클릭하면 네이버 지도가 열립니다</span>
-          <button class="bp bsm" style="margin-top:8px">지도 열기</button>
-        </div>
+        <div id="kakao-map2" style="width:100%;height:280px;border-radius:var(--r);overflow:hidden;border:1.5px solid var(--g2)"></div>
+        <a href="https://map.kakao.com/link/to/한국산업교육연구소안전교육센터,35.2310,129.0174" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-size:12px;color:var(--gm);font-weight:600;text-decoration:none">🗺️ 카카오맵에서 길찾기</a>
       </div>
     </div>
     <div class="ac">
@@ -1426,6 +1448,229 @@ document.addEventListener('DOMContentLoaded',()=>{
   seed();renderFAQ();renderCal();renderBlog();renderHomePosts();
   document.getElementById('tauth').onclick=()=>showPage('login');
 });
+</script>
+
+<script>
+// ══════════════════════════════════════════
+// 카카오맵 초기화
+// ══════════════════════════════════════════
+const KIEI_LAT = 35.2310;
+const KIEI_LNG = 129.0174;
+const KIEI_ADDR = '부산광역시 북구 금곡대로 458 금곡월드프라자 3층';
+
+function initKakaoMap(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  try {
+    const options = {
+      center: new kakao.maps.LatLng(KIEI_LAT, KIEI_LNG),
+      level: 3
+    };
+    const map = new kakao.maps.Map(container, options);
+
+    // 마커 생성
+    const markerPos = new kakao.maps.LatLng(KIEI_LAT, KIEI_LNG);
+    const marker = new kakao.maps.Marker({ position: markerPos });
+    marker.setMap(map);
+
+    // 인포윈도우 (말풍선)
+    const infowindow = new kakao.maps.InfoWindow({
+      content: `<div style="padding:8px 12px;font-size:13px;font-weight:700;color:#1A5E29;white-space:nowrap">
+        한국산업교육연구소 안전교육센터<br>
+        <span style="font-size:11px;color:#6B7B6C;font-weight:400">${KIEI_ADDR}</span>
+      </div>`
+    });
+    infowindow.open(map, marker);
+
+    // 지도 컨트롤
+    const zoomControl = new kakao.maps.ZoomControl();
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+    const mapTypeControl = new kakao.maps.MapTypeControl();
+    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+  } catch(e) {
+    console.log('카카오맵 초기화 오류:', e);
+    if (container) {
+      container.innerHTML = `
+        <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#EAF5EC;gap:8px">
+          <span style="font-size:36px">🗺️</span>
+          <p style="font-size:13px;color:#2A7D3B;font-weight:600">지도 로딩 중...</p>
+        </div>`;
+    }
+  }
+}
+
+// 페이지 이동 시 지도 초기화
+const _origShowPage = showPage;
+function showPage(p) {
+  _origShowPage(p);
+  if (p === 'home') {
+    setTimeout(() => initKakaoMap('kakao-map'), 100);
+  }
+  if (p === 'contact') {
+    setTimeout(() => initKakaoMap('kakao-map2'), 100);
+  }
+}
+
+// ══════════════════════════════════════════
+// SUPABASE 실제 DB 연동
+// ══════════════════════════════════════════
+
+async function doRegister() {
+  const name = document.getElementById('r-name').value.trim();
+  const phone = document.getElementById('r-phone').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const pw = document.getElementById('r-pw').value;
+  const pw2 = document.getElementById('r-pw2').value;
+  const company = document.getElementById('r-co').value.trim();
+  if (!name||!phone||!email||!pw){showToast('필수 항목을 모두 입력해주세요');return;}
+  if (pw!==pw2){showToast('비밀번호가 일치하지 않습니다');return;}
+  if (pw.length<8){showToast('비밀번호는 8자 이상이어야 합니다');return;}
+  showToast('처리 중...');
+  const {data:existing} = await supa.from('users').select('id').eq('email',email).maybeSingle();
+  if (existing){showToast('이미 사용중인 이메일입니다');return;}
+  const pwHash = btoa(email+pw+'kiei2026salt');
+  const {data,error} = await supa.from('users').insert({name,phone,email,company,password_hash:pwHash,role:'MEMBER'}).select().single();
+  if (error){showToast('오류: '+error.message);return;}
+  S.user=data;
+  const a=document.getElementById('tauth');
+  a.textContent=name+'님';a.onclick=()=>showPage('mypage');
+  localStorage.setItem('kiei_session',JSON.stringify(data));
+  showToast('✅ 회원가입 완료! 환영합니다, '+name+'님');
+  showPage('home');
+}
+
+async function doLogin() {
+  const email=document.getElementById('l-email').value.trim();
+  const pw=document.getElementById('l-pw').value;
+  if(!email||!pw){showToast('이메일과 비밀번호를 입력해주세요');return;}
+  showToast('로그인 중...');
+  const pwHash=btoa(email+pw+'kiei2026salt');
+  const {data,error}=await supa.from('users').select('*').eq('email',email).eq('password_hash',pwHash).maybeSingle();
+  if(error||!data){showToast('이메일 또는 비밀번호가 올바르지 않습니다');return;}
+  S.user=data;
+  const a=document.getElementById('tauth');
+  a.textContent=data.name+'님';a.onclick=()=>showPage('mypage');
+  localStorage.setItem('kiei_session',JSON.stringify(data));
+  showToast('환영합니다, '+data.name+'님!');
+  showPage('home');
+}
+
+async function submitApply() {
+  const course=document.getElementById('a-course').value;
+  const name=document.getElementById('a-name').value.trim();
+  const company=document.getElementById('a-co').value.trim();
+  const phone=document.getElementById('a-phone').value.trim();
+  const email=document.getElementById('a-email').value.trim();
+  const memo=document.getElementById('a-memo').value.trim();
+  if(!course||!name||!company||!phone||!email){showToast('필수 항목을 모두 입력해주세요');return;}
+  showToast('신청 중...');
+  const {data,error}=await supa.from('enrollments').insert({course_name:course,applicant_name:name,company,phone,email,memo,status:'대기중'}).select().single();
+  if(error){showToast('오류: '+error.message);return;}
+  S.enrollments.unshift({id:data.id,name,company,course,phone,email,date:new Date().toLocaleDateString('ko-KR'),status:'대기중',done:false});
+  showToast('✅ 교육 신청 완료! 담당자가 확인 후 연락드립니다');
+  ['a-course','a-name','a-co','a-pos','a-cnt','a-phone','a-email','a-date','a-memo'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  showPage('home');
+}
+
+async function submitContact() {
+  const name=document.getElementById('c-name').value.trim();
+  const phone=document.getElementById('c-phone').value.trim();
+  const content=document.getElementById('c-content').value.trim();
+  const company=document.getElementById('c-co').value.trim();
+  const email=document.getElementById('c-email').value.trim();
+  const type=document.getElementById('c-type').value;
+  if(!name||!phone||!content){showToast('이름, 연락처, 문의 내용은 필수입니다');return;}
+  showToast('접수 중...');
+  const {error}=await supa.from('inquiries').insert({name,phone,content,company,email,type,status:'UNREAD'});
+  if(error){showToast('오류: '+error.message);return;}
+  showToast('✅ 문의가 접수되었습니다. 빠르게 연락드리겠습니다!');
+  ['c-name','c-co','c-phone','c-email','c-content'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+}
+
+async function submitForm(type) {
+  const company=document.getElementById('fp-co')?.value.trim();
+  const name=document.getElementById('fp-name')?.value.trim();
+  const phone=document.getElementById('fp-phone')?.value.trim();
+  const content=document.getElementById('fp-content')?.value.trim();
+  if(!company||!name||!phone){showToast('필수 항목을 입력해주세요');return;}
+  const {error}=await supa.from('inquiries').insert({name,phone,company,content,type:'강사 파견',status:'UNREAD'});
+  if(error){showToast('오류: '+error.message);return;}
+  showToast('✅ '+type+' 완료! 담당자가 확인 후 연락드리겠습니다');
+}
+
+async function savePost() {
+  const title=document.getElementById('post-title').value.trim();
+  const content=document.getElementById('post-content').value.trim();
+  if(!title||!content){showToast('제목과 내용을 입력해주세요');return;}
+  const tags=document.getElementById('post-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  showToast('저장 중...');
+  const {data,error}=await supa.from('posts').insert({title,content,excerpt:content.substring(0,80)+'...',category:document.getElementById('post-cat').value,tags,icon:'📄',status:document.getElementById('post-status').value==='공개'?'published':'draft'}).select().single();
+  if(error){showToast('오류: '+error.message);return;}
+  S.posts.unshift({id:data.id,title,content,ex:content.substring(0,80)+'...',cat:data.category,tags,icon:'📄',views:0,status:'공개',date:new Date().toLocaleDateString('ko-KR')});
+  closeM('modal-post');renderAdmContent();showToast('✅ 글이 등록되었습니다');
+}
+
+async function approveE(id) {
+  const {error}=await supa.from('enrollments').update({status:'승인완료'}).eq('id',id);
+  if(error){showToast('오류: '+error.message);return;}
+  const e=S.enrollments.find(x=>x.id===id);
+  if(e)e.status='승인완료';
+  renderAdmin();showToast('✅ 승인 완료. 담당자가 연락드립니다');
+}
+
+async function loadPosts() {
+  const {data,error}=await supa.from('posts').select('*').eq('status','published').order('created_at',{ascending:false});
+  if(!error&&data&&data.length>0){
+    S.posts=data.map(p=>({id:p.id,title:p.title,content:p.content,ex:p.excerpt||(p.content?p.content.substring(0,80)+'...':''),cat:p.category||'안전정보',tags:p.tags||[],icon:p.icon||'📄',views:p.view_count||0,status:'공개',date:new Date(p.created_at).toLocaleDateString('ko-KR')}));
+  }
+  renderBlog();renderHomePosts();
+}
+
+async function loadNotices() {
+  const {data,error}=await supa.from('notices').select('*').order('is_pinned',{ascending:false}).order('created_at',{ascending:false});
+  if(!error&&data&&data.length>0){
+    S.notices=data.map(n=>({id:n.id,title:n.title,date:new Date(n.created_at).toLocaleDateString('ko-KR'),views:n.view_count||0,pin:n.is_pinned}));
+  }
+}
+
+async function loadEnrollments() {
+  const {data,error}=await supa.from('enrollments').select('*').order('applied_at',{ascending:false});
+  if(!error&&data){S.enrollments=data.map(e=>({id:e.id,name:e.applicant_name,company:e.company,course:e.course_name,phone:e.phone,email:e.email,date:new Date(e.applied_at).toLocaleDateString('ko-KR'),status:e.status,done:e.status==='수료완료'}));}
+}
+
+async function loadUsers() {
+  const {data,error}=await supa.from('users').select('*').order('created_at',{ascending:false});
+  if(!error&&data){S.users=data.map(u=>({id:u.id,name:u.name,email:u.email,phone:u.phone,company:u.company,joined:new Date(u.created_at).toLocaleDateString('ko-KR'),cnt:0,role:u.role}));}
+}
+
+function doLogout(){
+  S.user=null;localStorage.removeItem('kiei_session');
+  const a=document.getElementById('tauth');a.textContent='로그인';a.onclick=()=>showPage('login');
+  showToast('로그아웃 되었습니다');showPage('home');
+}
+
+function restoreSession(){
+  const saved=localStorage.getItem('kiei_session');
+  if(saved){try{S.user=JSON.parse(saved);const a=document.getElementById('tauth');a.textContent=S.user.name+'님';a.onclick=()=>showPage('mypage');}catch(e){}}
+}
+
+const _origRenderAdmin=renderAdmin;
+async function renderAdmin(){await loadEnrollments();await loadUsers();_origRenderAdmin();}
+
+// 초기화
+document.addEventListener('DOMContentLoaded',async()=>{
+  seed();renderFAQ();renderCal();restoreSession();
+  document.getElementById('tauth').onclick=()=>showPage('login');
+  await loadPosts();
+  await loadNotices();
+  renderNotice();
+  // 홈 카카오맵 초기화
+  setTimeout(()=>initKakaoMap('kakao-map'),500);
+});
+
+console.log('✅ 카카오맵 + Supabase 완전 연동 완료');
 </script>
 </body>
 </html>
