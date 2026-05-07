@@ -323,7 +323,12 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
 }
 </style>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .leaflet-container { font-family: 'Noto Sans KR', sans-serif; }
+</style>
 <script>
 const SUPA_URL = 'https://dwycuwrbhbjvabgqcefl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eWN1d3JiaGJqdmFiZ3FjZWZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMjY1MjMsImV4cCI6MjA5MzcwMjUyM30.3jxje-NCqOTjvor33LWmEAk-5xaliLkYZgpNbmWwBQg';
@@ -505,12 +510,11 @@ const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
       <div class="crow"><div class="cbox">🌐</div><div><strong>블로그</strong><p>blog.naver.com/1990kiei</p></div></div>
     </div>
     <div>
-      <div class="mapbox" onclick="window.open('https://map.naver.com/p/entry/place/16501631','_blank')">
-        <span style="font-size:44px">🗺️</span><p>네이버 지도로 보기</p>
-        <span>부산 북구 금곡대로 458 금곡월드프라자 3층</span>
-        <button class="bp bsm" style="margin-top:8px">지도 열기</button>
-      </div>
-      <p style="font-size:11px;color:var(--g4);margin-top:8px;text-align:center">※ 네이버 클라우드 API 키 적용 시 지도가 직접 표시됩니다</p>
+      <div id="osm-map1" style="width:100%;height:300px;border-radius:var(--r);border:1.5px solid var(--g2);overflow:hidden;z-index:1"></div>
+      <a href="https://www.openstreetmap.org/?mlat=35.2310&mlon=129.0174#map=17/35.2310/129.0174" target="_blank"
+        style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:13px;color:var(--gm);font-weight:700;text-decoration:none">
+        🗺️ 지도에서 크게 보기 →
+      </a>
     </div>
   </div></div></div>
 </div>
@@ -705,11 +709,11 @@ const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
         <div class="crow"><div class="cbox">🕐</div><div><strong>운영시간</strong><p>평일 09:00~18:00 / 주말·공휴일 휴무</p></div></div>
       </div>
       <div>
-        <div class="mapbox" onclick="window.open('https://map.naver.com/p/entry/place/16501631','_blank')">
-          <span style="font-size:44px">🗺️</span><p>네이버 지도로 보기</p>
-          <span>클릭하면 네이버 지도가 열립니다</span>
-          <button class="bp bsm" style="margin-top:8px">지도 열기</button>
-        </div>
+        <div id="osm-map2" style="width:100%;height:300px;border-radius:var(--r);border:1.5px solid var(--g2);overflow:hidden;z-index:1"></div>
+        <a href="https://www.openstreetmap.org/?mlat=35.2310&mlon=129.0174#map=17/35.2310/129.0174" target="_blank"
+          style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:13px;color:var(--gm);font-weight:700;text-decoration:none">
+          🗺️ 지도에서 크게 보기 →
+        </a>
       </div>
     </div>
     <div class="ac">
@@ -1456,6 +1460,73 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <script>
+// ── OpenStreetMap (Leaflet) 초기화 ──
+const KIEI_LAT = 35.2310;
+const KIEI_LNG = 129.0174;
+const KIEI_NAME = '한국산업교육연구소 안전교육센터';
+const KIEI_ADDR = '부산 북구 금곡대로 458 금곡월드프라자 3층';
+let mapInstances = {};
+
+function initOSMMap(id) {
+  const el = document.getElementById(id);
+  if (!el || mapInstances[id]) return;
+
+  const map = L.map(id, { zoomControl: true }).setView([KIEI_LAT, KIEI_LNG], 16);
+
+  // OpenStreetMap 타일
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19
+  }).addTo(map);
+
+  // 커스텀 마커 (초록색)
+  const icon = L.divIcon({
+    html: `<div style="
+      background:#2A7D3B;
+      width:36px;height:36px;
+      border-radius:50% 50% 50% 0;
+      transform:rotate(-45deg);
+      border:3px solid #fff;
+      box-shadow:0 2px 8px rgba(0,0,0,0.3)">
+    </div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    className: ''
+  });
+
+  const marker = L.marker([KIEI_LAT, KIEI_LNG], { icon }).addTo(map);
+
+  // 팝업
+  marker.bindPopup(`
+    <div style="padding:4px;min-width:200px">
+      <strong style="color:#1A5E29;font-size:13px">${KIEI_NAME}</strong><br>
+      <span style="font-size:11px;color:#6B7B6C">${KIEI_ADDR}</span><br>
+      <span style="font-size:11px;color:#6B7B6C">📞 051-327-5604</span>
+    </div>
+  `, { maxWidth: 250 }).openPopup();
+
+  mapInstances[id] = map;
+}
+
+// 페이지 이동 시 지도 초기화
+const _origShowPage = showPage;
+function showPage(p) {
+  _origShowPage(p);
+  if (p === 'home') {
+    setTimeout(() => {
+      initOSMMap('osm-map1');
+      if (mapInstances['osm-map1']) mapInstances['osm-map1'].invalidateSize();
+    }, 300);
+  }
+  if (p === 'contact') {
+    setTimeout(() => {
+      initOSMMap('osm-map2');
+      if (mapInstances['osm-map2']) mapInstances['osm-map2'].invalidateSize();
+    }, 300);
+  }
+}
+
+// ── Supabase 연동 ──
 async function doRegister() {
   const name=document.getElementById('r-name').value.trim();
   const phone=document.getElementById('r-phone').value.trim();
@@ -1603,6 +1674,8 @@ document.addEventListener('DOMContentLoaded',async()=>{
   await loadPosts();
   await loadNotices();
   renderNotice();
+  // 홈 지도 초기화
+  setTimeout(()=>initOSMMap('osm-map1'),500);
 });
 </script>
 </body>
