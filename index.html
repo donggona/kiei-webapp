@@ -1500,14 +1500,44 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 
   const baseShowPage = showPage;
-  showPage = function(p) {
+  let routeApplying = false;
+  const routePages = new Set(['home','courses','blog','notice','resources','contact','apply','login','mypage','admin','admin-login','blog-detail']);
+  function routeHash(p) {
+    if (p === 'blog-detail' && S.currentPostId) return '#post=' + encodeURIComponent(S.currentPostId);
+    return p === 'home' ? '#home' : '#' + p;
+  }
+  function writeRoute(p, replace) {
+    if (routeApplying || !routePages.has(p)) return;
+    const next = routeHash(p);
+    if (location.hash === next) return;
+    history[replace ? 'replaceState' : 'pushState']({ page:p, post:S.currentPostId || null }, '', next);
+  }
+  function openRouteFromHash(replace) {
+    const hash = decodeURIComponent(location.hash || '').replace(/^#/, '');
+    routeApplying = true;
+    try {
+      if (hash.startsWith('post=')) {
+        const id = hash.slice(5);
+        if (id && S.posts.some(p=>String(p.id)===String(id))) showPost(id, { replace:true });
+        else baseShowPage('blog');
+        return;
+      }
+      const page = routePages.has(hash) ? hash : 'home';
+      showPage(page, { replace });
+    } finally {
+      routeApplying = false;
+    }
+  }
+  showPage = function(p, opts={}) {
     if (p === 'apply' && !S.user) {
       showToast('교육 신청은 회원가입 또는 로그인 후 가능합니다');
       baseShowPage('login');
+      writeRoute('login', opts.replace);
       trackPage('login');
       return;
     }
     baseShowPage(p);
+    writeRoute(p, opts.replace);
     if (p === 'home') setTimeout(() => { initOSMMap('osm-map1'); _mapInst['osm-map1']?.invalidateSize(); }, 250);
     if (p === 'contact') setTimeout(() => { initOSMMap('osm-map2'); _mapInst['osm-map2']?.invalidateSize(); }, 250);
     if (p === 'apply' || p === 'mypage') prefillMemberForms();
@@ -1536,8 +1566,9 @@ document.addEventListener('DOMContentLoaded',()=>{
         <div class="ptags">${(p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div></div>
       </div>`).join('');
   };
-  window.showPost = function(id) {
+  window.showPost = function(id, opts={}) {
     const p=S.posts.find(x=>String(x.id)===String(id)); if(!p) return;
+    S.currentPostId = String(p.id);
     p.views=(p.views||0)+1;
     const img = p.img ? `<div class="post-img" style="height:260px;border-radius:var(--r);overflow:hidden;margin-bottom:22px;background:var(--gl)"><img src="${esc(p.img)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.closest('.post-img').remove()"></div>` : '';
     const link = p.link ? `<div style="margin:28px 0 4px;display:flex"><a class="bs" href="${esc(p.link)}" target="_blank" rel="noopener">원문 블로그 보기</a></div>` : '';
@@ -1555,7 +1586,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         <strong style="color:var(--gd);font-size:14px">안전한 현장, 행복한 세상 - 한국산업교육연구소 안전교육센터</strong><br>
         <span style="font-size:13px;color:var(--g5)">전화: 051-327-5604 | kiei@kiei.or.kr</span>
       </div>`;
-    showPage('blog-detail');
+    showPage('blog-detail', opts);
   };
   window.filterBlog = function(kw) {
     const k=String(kw||'').toLowerCase();
@@ -1981,11 +2012,14 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 
   window.addEventListener('beforeunload',()=>trackPage('leave'));
+  window.addEventListener('popstate',()=>openRouteFromHash(false));
+  window.addEventListener('hashchange',()=>{ if(!routeApplying) openRouteFromHash(false); });
   window.addEventListener('load', async () => {
     S.enrollments=[]; S.users=[]; S.certs=[];
     restoreSession(); restoreSettings();
     await Promise.allSettled([loadPosts(), loadNotices(), loadEnrollments(), loadUsers(), loadCerts(), loadResources()]);
     renderNotice(); renderRes(); renderBlog(); renderHomePosts(); renderVisitChart(); prefillMemberForms();
+    openRouteFromHash(true);
     setTimeout(() => initOSMMap('osm-map1'), 300);
   });
 })();
