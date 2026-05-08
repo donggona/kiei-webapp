@@ -292,10 +292,11 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
 @media(max-width:1024px){.ftop{grid-template-columns:1fr 1fr}.alayout{grid-template-columns:180px 1fr}}
 @media(max-width:768px){
   .nm{display:none}.hbg{display:flex}
-  .hero{height:auto;min-height:auto}
-  .hc{position:relative;inset:auto;display:block;padding:0}
-  .ho{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,94,41,0.85) 0%,rgba(26,94,41,0.75) 100%)}
-  .hin{padding:36px 20px 36px}
+  .hero{height:680px;min-height:640px}
+  .hi{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .hc{position:absolute;inset:0;display:flex;align-items:flex-end;padding:0}
+  .ho{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,94,41,0.72) 0%,rgba(26,94,41,0.82) 46%,rgba(26,94,41,0.94) 100%)}
+  .hin{padding:0 20px 118px}
   .ht{max-width:100%}
   .hbadge{font-size:10px;padding:4px 10px;margin-bottom:14px}
   .hero h1{font-size:26px;margin-bottom:10px}
@@ -309,7 +310,10 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
   .hs .n span{font-size:11px}
   .hs .l{font-size:9px}
   .hsd{display:none}
-  .cfl{display:none}
+  .cfl{display:flex;left:auto;right:16px;top:18px;bottom:auto;width:150px;flex-direction:column;gap:8px}
+  .cc{flex:1;min-width:0;padding:8px 10px;border-radius:10px;gap:8px}
+  .cc strong{font-size:11px}
+  .cc span{font-size:9px}
   .cg{grid-template-columns:1fr}.mlayout{grid-template-columns:1fr}.msb{display:none}
   .alayout{grid-template-columns:1fr}.aside{display:none}
   .ftop{grid-template-columns:1fr}.fcol:not(.fbrand){display:none}
@@ -317,9 +321,13 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
   .mcta{display:block}body{padding-bottom:72px}
 }
 @media(max-width:480px){
+  .hero{height:700px}
   .hero h1{font-size:22px}
   .cr{flex-direction:column;align-items:center}
   .hbadge{font-size:9.5px}
+  .hin{padding:0 20px 112px}
+  .cfl{right:14px;width:142px}
+  .cc{padding:7px 8px}
 }
 </style>
 
@@ -335,6 +343,7 @@ let _mapInst = {};
 function initOSMMap(id) {
   const el = document.getElementById(id);
   if (!el || _mapInst[id]) return;
+  if (typeof L === 'undefined') return;
   const map = L.map(id).setView([35.2310, 129.0174], 16);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
@@ -1486,8 +1495,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     return 'spr';
   }
   function postThumb(p) {
-    if (p.img) return `<img src="${esc(p.img)}" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy"><span class="ptcat">${esc(p.cat)}</span>`;
-    return `${esc(p.icon || '📄')}<span class="ptcat">${esc(p.cat)}</span>`;
+    const icon = esc(p.icon || '📄');
+    return `${icon}<span class="ptcat">${esc(p.cat)}</span>`;
   }
 
   const baseShowPage = showPage;
