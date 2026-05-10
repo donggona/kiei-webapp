@@ -131,7 +131,8 @@ nav{background:var(--w);border-bottom:2px solid var(--gm);position:sticky;top:0;
 .pcard{background:var(--w);border-radius:var(--r);border:1.5px solid var(--g2);overflow:hidden;transition:var(--tr);cursor:pointer}
 .pcard:hover{box-shadow:var(--shm);transform:translateY(-3px);border-color:var(--gm)}
 .pt{height:168px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;overflow:hidden}
-.pt img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:42px;line-height:1;z-index:0}
+.pt img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:1}
 .ptcat{position:absolute;top:12px;left:12px;background:var(--gm);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px}
 .pc{padding:20px}
 .pd{font-size:11px;color:var(--g4);margin-bottom:6px}
@@ -145,7 +146,6 @@ nav{background:var(--w);border-bottom:2px solid var(--gm);position:sticky;top:0;
 .post-text{white-space:pre-line;margin:0;background:var(--gp);border:1.5px solid var(--gl);border-radius:var(--r);padding:18px 20px}
 .post-text:first-line{font-weight:800;color:var(--gd)}
 .post-figure{margin:0}
-.post-figure figcaption{font-size:11px;color:var(--g4);padding:8px 12px;background:#fff}
 
 /* CTA BANNER */
 .ctab{background:linear-gradient(135deg,var(--gd) 0%,var(--gi) 100%);padding:56px 24px;text-align:center}
@@ -1459,7 +1459,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
-<script src="./kiei-blog-data.js?v=20260510-clean1"></script>
+<script src="./kiei-blog-data.js?v=20260510-safeinfo2"></script>
 
 <script>
 (() => {
@@ -1467,7 +1467,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   const FALLBACK_POSTS = Array.isArray(window.KIEI_BLOG_POSTS) && window.KIEI_BLOG_POSTS.length
     ? window.KIEI_BLOG_POSTS
-    : [{id:'fallback-safety',title:'???? ?? ?',cat:'???',date:'2026.05.10',ex:'PDF ?? ??? ??? ??? ???.',tags:['???'],icon:'???',views:0,status:'??',content:'PDF ?? ???? ???? ??? ?? ?????.'}];
+    : [{id:'fallback-safety',title:'안전정보 준비 중',cat:'자료실',date:'2026.05.10',ex:'PDF 백업 데이터 파일을 확인해 주세요.',tags:['자료실'],iconKey:'default',views:0,status:'공개',content:'PDF 백업 데이터가 연결되면 안전정보 글이 표시됩니다.'}];
 
   const NOTICE_FALLBACK = [
     {id:'fn1',title:'2026년도 관리감독자 정기 안전보건교육 실시 안내',date:'2026.03.09',views:0,pin:true},
@@ -1563,24 +1563,71 @@ document.addEventListener('DOMContentLoaded',()=>{
     if (status === '대기중') return 'spp';
     return 'spr';
   }
+  function cleanPostText(text) {
+    return String(text ?? '')
+      .split(/\r?\n/)
+      .map(line => line.replace(/\s+$/,''))
+      .filter(line => !/^\s*\d+\s*·\s*-\s*$/.test(line))
+      .join('\n')
+      .replace(/\n{3,}/g,'\n\n')
+      .trim();
+  }
+  function postIconKey(p) {
+    const text = `${p?.title || ''} ${p?.cat || ''} ${(p?.tags || []).join(' ')}`;
+    if (/보호구|안전모|안전화|장갑|착용/.test(text)) return 'ppe';
+    if (/화재|폭염|한파|계절|감전|위험/.test(text)) return 'risk';
+    if (/TBM|안전문화|점검|체크|회의/.test(text)) return 'check';
+    if (/교육|관리감독자|법정|신청|미이수/.test(text)) return 'training';
+    if (/감정|마음|행동|심리|자아상태|소통/.test(text)) return 'mind';
+    if (/근골격|건강|스트레칭|무리|질환/.test(text)) return 'health';
+    return 'default';
+  }
+  function postEmoji(p) {
+    const raw = String(p?.icon || '').trim();
+    if (raw && !/^\?+$/.test(raw) && raw !== '???') return esc(raw);
+    const map = {
+      mind:'&#129504;',
+      ppe:'&#129466;',
+      risk:'&#9888;&#65039;',
+      check:'&#128203;',
+      training:'&#128218;',
+      health:'&#128170;',
+      default:'&#128737;&#65039;'
+    };
+    return map[p?.iconKey] || map[postIconKey(p)] || map.default;
+  }
+  function normalizePost(p) {
+    const copy = {...p};
+    copy.content = cleanPostText(copy.content);
+    copy.ex = cleanPostText(copy.ex || copy.excerpt || copy.content).slice(0, 130);
+    copy.tags = Array.isArray(copy.tags) ? copy.tags.filter(Boolean) : [];
+    copy.blocks = Array.isArray(copy.blocks)
+      ? copy.blocks.map(b => {
+          if (b?.type === 'text') return {...b, text: cleanPostText(b.text)};
+          if (b?.type === 'image' && b.src) return b;
+          return null;
+        }).filter(b => b && (b.type !== 'text' || b.text))
+      : [];
+    return copy;
+  }
   function postThumb(p) {
-    const icon = esc(p.icon || '📄');
+    const icon = `<span class="thumb-emoji">${postEmoji(p)}</span>`;
     const label = `<span class="ptcat">${esc(p.cat)}</span>`;
-    if (p.img) return `<img loading="lazy" src="${esc(p.img)}" alt="${esc(p.title || '')}" onerror="this.remove()">${label}`;
+    if (p.img) return `${icon}<img loading="lazy" src="${esc(p.img)}" alt="${esc(p.title || '')}" onerror="this.remove()">${label}`;
     return `${icon}${label}`;
   }
   function renderPostBody(p) {
-    if (!Array.isArray(p.blocks) || !p.blocks.length) return `<div class="post-text">${esc(p.content || p.ex || '')}</div>`;
+    if (!Array.isArray(p.blocks) || !p.blocks.length) return `<div class="post-text">${esc(cleanPostText(p.content || p.ex || ''))}</div>`;
     let heroSkipped = false;
     const html = p.blocks.map(b => {
       if (b.type === 'image' && b.src) {
         if (!heroSkipped && p.img && b.src === p.img) { heroSkipped = true; return ''; }
-        return `<figure class="post-figure"><img loading="lazy" src="${esc(b.src)}" alt="${esc(b.alt || p.title || '')}" onerror="this.closest('.post-figure').remove()"><figcaption>${esc(p.title || '')}</figcaption></figure>`;
+        return `<figure class="post-figure"><img loading="lazy" src="${esc(b.src)}" alt="${esc(b.alt || p.title || '')}" onerror="this.closest('.post-figure').remove()"></figure>`;
       }
-      if (b.type === 'text' && b.text) return `<div class="post-text">${esc(b.text)}</div>`;
+      if (b.type === 'text' && b.text) return `<div class="post-text">${esc(cleanPostText(b.text))}</div>`;
       return '';
     }).join('');
-    return html || `<div class="post-text">${esc(p.content || p.ex || '')}</div>`;
+    return html || `<div class="post-text">${esc(cleanPostText(p.content || p.ex || ''))}</div>`;
   }
   function normalizeNoticeDetail(n) {
     const title = String(n?.title || '');
@@ -2047,12 +2094,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   };
 
   async function loadPosts() {
-    S.posts = [...FALLBACK_POSTS];
+    S.posts = FALLBACK_POSTS.map(normalizePost);
     if(!hasDb()) { renderBlog(); renderHomePosts(); return; }
     const { data, error } = await supa.from('posts').select('*').eq('status','published').order('created_at',{ascending:false});
     if(!error && data?.length) {
-      const dbPosts=data.map(p=>({id:p.id,title:p.title,content:p.content,ex:p.excerpt||String(p.content||'').slice(0,110),cat:p.category||'안전정보',tags:p.tags||[],icon:p.icon||'📄',views:p.view_count||0,status:'공개',date:new Date(p.created_at).toLocaleDateString('ko-KR')}));
-      S.posts=[...dbPosts,...FALLBACK_POSTS.filter(p=>!dbPosts.some(d=>d.title===p.title))];
+      const dbPosts=data.map(p=>normalizePost({id:p.id,title:p.title,content:p.content,ex:p.excerpt||String(p.content||'').slice(0,110),cat:p.category||'안전정보',tags:p.tags||[],icon:p.icon||'',views:p.view_count||0,status:'공개',date:new Date(p.created_at).toLocaleDateString('ko-KR')}));
+      S.posts=[...dbPosts,...FALLBACK_POSTS.map(normalizePost).filter(p=>!dbPosts.some(d=>d.title===p.title))];
     }
     renderBlog(); renderHomePosts();
   }
