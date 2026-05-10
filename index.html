@@ -715,14 +715,6 @@ function initOSMMap(id) {
   </div></div>
 </div>
 
-<!-- BLOG DETAIL -->
-<div class="page" id="page-blog-detail">
-  <div class="sec"><div class="si" style="max-width:760px">
-    <button onclick="showPage('blog')" style="display:flex;align-items:center;gap:6px;color:var(--gm);font-weight:600;font-size:13px;margin-bottom:24px;background:none;border:none;cursor:pointer">← 목록으로</button>
-    <div id="blog-detail-content"></div>
-  </div></div>
-</div>
-
 <!-- ══ RESOURCES ══ -->
 <div class="page" id="page-resources">
   <div class="ph"><div class="phi"><div class="bc">홈 > 자료실</div><h1>자료실</h1><p>법령 자료, 교육 교안, 안전 매뉴얼 다운로드</p></div></div>
@@ -1203,20 +1195,9 @@ function renderBlog(posts){
 function filterBlog(kw){const k=kw.toLowerCase();renderBlog(S.posts.filter(p=>p.title.toLowerCase().includes(k)||p.tags.some(t=>t.includes(k))||p.cat.includes(k)));}
 function filterCat(c){renderBlog(c==='전체'?S.posts:S.posts.filter(p=>p.cat===c));}
 function showPost(id){
-  const p=S.posts.find(x=>x.id===id);if(!p)return;p.views++;
-  document.getElementById('blog-detail-content').innerHTML=`
-    <div class="pd" style="margin-bottom:8px">${p.date} · ${p.cat}</div>
-    <h1 style="font-size:22px;font-weight:900;line-height:1.4;margin-bottom:16px">${p.title}</h1>
-    <div class="ptags" style="margin-bottom:24px">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-    <hr style="border:none;border-top:2px solid var(--g2);margin-bottom:28px">
-    <div style="font-size:15px;color:var(--g7);line-height:1.9;white-space:pre-line">${p.content}</div>
-    <hr style="border:none;border-top:1px solid var(--g2);margin:32px 0 20px">
-    <div style="background:var(--gl);border-radius:var(--r);padding:20px;text-align:center">
-      <p style="font-size:13px;color:var(--g5);margin-bottom:12px">법정교육(산업안전보건교육, 개인정보보호교육, 직장내성희롱예방교육) 집체교육/현장교육/온라인교육/비대면교육/맞춤형교육/안전행동컨설팅</p>
-      <strong style="color:var(--gd);font-size:14px">안전한 현장, 행복한 세상 — 한국산업교육연구소 안전교육센터</strong><br>
-      <span style="font-size:13px;color:var(--g5)">전화: 051-327-5604 | kiei@kiei.or.kr</span>
-    </div>`;
-  showPage('blog-detail');
+  const p=S.posts.find(x=>String(x.id)===String(id)); if(!p)return;
+  p.views=(p.views||0)+1;
+  location.assign(postSourceUrl(p));
 }
 
 // HOME POSTS
@@ -1447,7 +1428,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
-<script src="./kiei-blog-data.js?v=20260510-readable2"></script>
+<script src="./kiei-blog-data.js?v=20260511-directblog"></script>
 
 
 <script>
@@ -1605,18 +1586,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     if (p.img) return `${icon}<img loading="lazy" src="${esc(p.img)}" alt="${esc(p.title || '')}" onerror="this.remove()">${label}`;
     return `${icon}${label}`;
   }
-  function renderPostBody(p) {
-    if (!Array.isArray(p.blocks) || !p.blocks.length) return `<div class="post-text">${esc(cleanPostText(p.content || p.ex || ''))}</div>`;
-    let heroSkipped = false;
-    const html = p.blocks.map(b => {
-      if (b.type === 'image' && b.src) {
-        if (!heroSkipped && p.img && b.src === p.img) { heroSkipped = true; return ''; }
-        return `<figure class="post-figure"><img loading="lazy" src="${esc(b.src)}" alt="${esc(b.alt || p.title || '')}" onerror="this.closest('.post-figure').remove()"></figure>`;
-      }
-      if (b.type === 'text' && b.text) return `<div class="post-text">${esc(cleanPostText(b.text))}</div>`;
-      return '';
-    }).join('');
-    return html || `<div class="post-text">${esc(cleanPostText(p.content || p.ex || ''))}</div>`;
+  function postSourceUrl(p) {
+    return p?.link || p?.source || 'https://blog.naver.com/1990kiei';
   }
   function normalizeNoticeDetail(n) {
     const title = String(n?.title || '');
@@ -1667,9 +1638,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   const baseShowPage = showPage;
   let routeApplying = false;
-  const routePages = new Set(['home','courses','blog','notice','resources','contact','apply','login','mypage','admin','admin-login','blog-detail','notice-detail']);
+  const routePages = new Set(['home','courses','blog','notice','resources','contact','apply','login','mypage','admin','admin-login','notice-detail']);
   function routeHash(p) {
-    if (p === 'blog-detail' && S.currentPostId) return '#post=' + encodeURIComponent(S.currentPostId);
     if (p === 'notice-detail' && S.currentNoticeId) return '#notice=' + encodeURIComponent(S.currentNoticeId);
     return p === 'home' ? '#home' : '#' + p;
   }
@@ -1685,7 +1655,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     try {
       if (hash.startsWith('post=')) {
         const id = hash.slice(5);
-        if (id && S.posts.some(p=>String(p.id)===String(id))) showPost(id, { replace:true });
+        const post = S.posts.find(p=>String(p.id)===String(id));
+        if (post) location.replace(postSourceUrl(post));
         else baseShowPage('blog');
         return;
       }
@@ -1743,24 +1714,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     const p=S.posts.find(x=>String(x.id)===String(id)); if(!p) return;
     S.currentPostId = String(p.id);
     p.views=(p.views||0)+1;
-    const img = p.img ? `<figure class="post-hero"><img src="${esc(p.img)}" alt="${esc(p.title)}" onerror="this.closest('.post-hero').remove()"></figure>` : '';
-    const link = p.link ? `<div style="margin:28px 0 4px;display:flex"><a class="bs" href="${esc(p.link)}" target="_blank" rel="noopener">원문 블로그 보기</a></div>` : '';
-    const body = renderPostBody(p);
-    document.getElementById('blog-detail-content').innerHTML=`
-      ${img}
-      <div class="pd" style="margin-bottom:8px">${esc(p.date)} · ${esc(p.cat)}</div>
-      <h1 style="font-size:22px;font-weight:900;line-height:1.4;margin-bottom:16px">${esc(p.title)}</h1>
-      <div class="ptags" style="margin-bottom:24px">${(p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
-      <hr style="border:none;border-top:2px solid var(--g2);margin-bottom:28px">
-      <div class="post-body">${body}</div>
-      ${link}
-      <hr style="border:none;border-top:1px solid var(--g2);margin:32px 0 20px">
-      <div style="background:var(--gl);border-radius:var(--r);padding:20px;text-align:center">
-        <p style="font-size:13px;color:var(--g5);margin-bottom:12px">법정교육, 집체교육, 현장교육, 온라인교육, 비대면교육, 맞춤형교육, 안전행동컨설팅</p>
-        <strong style="color:var(--gd);font-size:14px">안전한 현장, 행복한 세상 - 한국산업교육연구소 안전교육센터</strong><br>
-        <span style="font-size:13px;color:var(--g5)">전화: 051-327-5604 | kiei@kiei.or.kr</span>
-      </div>`;
-    showPage('blog-detail', opts);
+    location.assign(postSourceUrl(p));
   };
   window.filterBlog = function(kw) {
     const k=String(kw||'').toLowerCase();
