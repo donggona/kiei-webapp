@@ -141,8 +141,10 @@ nav{background:var(--w);border-bottom:2px solid var(--gm);position:sticky;top:0;
 .tag{font-size:10px;background:var(--gl);color:var(--gd);padding:3px 9px;border-radius:8px;font-weight:500}
 .post-hero,.post-figure{border-radius:var(--r);overflow:hidden;background:var(--gl);border:1.5px solid var(--g2);margin:0 0 22px}
 .post-hero img,.post-figure img{width:100%;height:auto;display:block}
-.post-body{font-size:15px;color:var(--g7);line-height:1.9}
-.post-text{white-space:pre-line;margin:0 0 24px}
+.post-body{font-size:15px;color:var(--g7);line-height:1.9;display:flex;flex-direction:column;gap:18px}
+.post-text{white-space:pre-line;margin:0;background:var(--gp);border:1.5px solid var(--gl);border-radius:var(--r);padding:18px 20px}
+.post-text:first-line{font-weight:800;color:var(--gd)}
+.post-figure{margin:0}
 .post-figure figcaption{font-size:11px;color:var(--g4);padding:8px 12px;background:#fff}
 
 /* CTA BANNER */
@@ -1457,7 +1459,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
-<script src="./kiei-blog-data.js"></script>
+<script src="./kiei-blog-data.js?v=20260510-clean1"></script>
 
 <script>
 (() => {
