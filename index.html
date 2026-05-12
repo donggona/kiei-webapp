@@ -364,10 +364,34 @@ footer{background:var(--gd);color:rgba(255,255,255,0.78);padding:40px 24px 24px}
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// Supabase 클라이언트
-const supa = supabase.createClient('https://dwycuwrbhbjvabgqcefl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eWN1d3JiaGJqdmFiZ3FjZWZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMjY1MjMsImV4cCI6MjA5MzcwMjUyM30.3jxje-NCqOTjvor33LWmEAk-5xaliLkYZgpNbmWwBQg');
+// Optional data layer: loaded only when forms, login, or admin actions need it.
+const SUPABASE_URL = 'https://dwycuwrbhbjvabgqcefl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3eWN1d3JiaGJqdmFiZ3FjZWZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMjY1MjMsImV4cCI6MjA5MzcwMjUyM30.3jxje-NCqOTjvor33LWmEAk-5xaliLkYZgpNbmWwBQg';
+let supa = null;
+let supabaseLoadPromise = null;
+function loadScriptOnce(src) {
+  const found = document.querySelector(`script[src="${src}"]`);
+  if (found) return Promise.resolve(found);
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.async = true;
+    s.onload = () => resolve(s);
+    s.onerror = () => reject(new Error('데이터 연결 모듈을 불러오지 못했습니다.'));
+    document.head.appendChild(s);
+  });
+}
+async function ensureDb() {
+  if (supa && typeof supa.from === 'function') return supa;
+  if (!supabaseLoadPromise) {
+    supabaseLoadPromise = loadScriptOnce('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
+  }
+  await supabaseLoadPromise;
+  if (!window.supabase?.createClient) throw new Error('데이터 연결 모듈을 확인할 수 없습니다.');
+  supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  return supa;
+}
 
 // OpenStreetMap 지도
 let _mapInst = {};
@@ -1171,10 +1195,18 @@ function switchTab(btn,pid){
 }
 
 // AUTH: 실제 동작은 하단 안정화 스크립트에서 단일 책임으로 연결합니다.
-function doAdminLogin(){
+async function doAdminLogin(){
   const id=document.getElementById('adm-id').value;
   const pw=document.getElementById('adm-pw').value;
-  if(id==='admin'&&pw==='kiei2026'){S.isAdmin=true;showToast('관리자로 로그인되었습니다');showPage('admin');}
+  if(id==='admin'&&pw==='kiei2026'){
+    S.isAdmin=true;
+    showToast('관리자로 로그인되었습니다');
+    try {
+      await ensureDb();
+      await Promise.allSettled([loadPosts(), loadNotices(), loadEnrollments(), loadUsers(), loadCerts(), loadResources()]);
+    } catch(e) {}
+    showPage('admin');
+  }
   else showToast('관리자 정보가 올바르지 않습니다');
 }
 function doAdminLogout(){S.isAdmin=false;showToast('로그아웃 되었습니다');showPage('home');}
@@ -1499,6 +1531,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     catch(e) { return utf8b64(email + pw + 'kiei2026salt'); }
   }
   async function dbOrError(action, userMessage) {
+    await ensureDb();
     if (!hasDb()) throw new Error('Supabase 연결을 확인할 수 없습니다.');
     try { return await action(); }
     catch(e) { throw new Error(userMessage || e.message || '처리 중 오류가 발생했습니다.'); }
